@@ -1,7 +1,9 @@
-name: Verify v0.8 preview
+name: Verify
 on:
   push:
-    branches: [preview/layout-water-v0.8]
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

@@ -1,0 +1,82 @@
+name: Archive old branches and record v0.8
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/maintain-v08.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: maintain-v08
+  cancel-in-progress: false
+jobs:
+  archive:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const repo = context.repo;
+            const releaseSha = 'fbefad970abb1eb05473e161803ed3f062758427';
+            const branches = [{"name": "feature/water-v07", "sha": "1b31b25a9b082b08969226782ef6203d44eb45d2"}, {"name": "preview/layout-water-v0.8", "sha": "e2d56ab9f6f72f63486bfdbe7d6cd0e035ffbc34"}, {"name": "preview/release-v0.7.1", "sha": "905c25d4f2f1a2d46b7efef31c3650c074b99001"}, {"name": "preview/v0.6", "sha": "c94d1f97dbb6f4997866eebbb43c41fce75245ce"}, {"name": "preview/v0.7-water-camera", "sha": "dc66fe52d8988f5a6a59a8c5cbaec3e47811a384"}, {"name": "preview/v0.7-water-camera-shelter", "sha": "dc66fe52d8988f5a6a59a8c5cbaec3e47811a384"}, {"name": "preview/verify-git-deployment-20260908", "sha": "e6e63922c54c45272941d402f136d32daed249fa"}, {"name": "preview/water-camera-v0.7", "sha": "e2d5a44b9fbad2bcabba8d1988813d67d4c889c4"}];
+            async function optional(get) {
+              try { return (await get()).data; }
+              catch (e) { if (e.status === 404) return null; throw e; }
+            }
+            async function ref(name) {
+              return optional(() => github.rest.git.getRef({...repo, ref: name}));
+            }
+            // Check every target before making any changes. Refuse changed or protected branches.
+            for (const b of branches) {
+              const current = await optional(() => github.rest.repos.getBranch({...repo, branch: b.name}));
+              if (current && (current.commit.sha !== b.sha || current.protected)) {
+                throw new Error(`Branch changed or protected: ${b.name}`);
+              }
+              const saved = await ref(`tags/archive/${b.name}`);
+              if (saved && saved.object.sha !== b.sha) throw new Error(`Archive tag conflict: ${b.name}`);
+            }
+            const releaseTag = await ref('tags/v0.8');
+            if (releaseTag && releaseTag.object.sha !== releaseSha) throw new Error('v0.8 tag conflict');
+            const release = await optional(() => github.rest.repos.getReleaseByTag({...repo, tag: 'v0.8'}));
+            // Preserve all histories first. Verify each archive before any deletion.
+            for (const b of branches) {
+              if (!await ref(`tags/archive/${b.name}`)) {
+                await github.rest.git.createRef({...repo, ref: `refs/tags/archive/${b.name}`, sha: b.sha});
+              }
+              const saved = await ref(`tags/archive/${b.name}`);
+              if (saved?.object.sha !== b.sha) throw new Error(`Archive verification failed: ${b.name}`);
+            }
+            if (!releaseTag) await github.rest.git.createRef({...repo, ref: 'refs/tags/v0.8', sha: releaseSha});
+            if (!release) {
+              await github.rest.repos.createRelease({...repo, tag_name: 'v0.8', target_commitish: releaseSha,
+                name: 'v0.8 — 日暮里・荒川 水害情報ビューア', draft: false, prerelease: false,
+                body: [
+                  '日暮里・荒川区周辺の水害情報を集約するv0.8公開版です。',
+                  '',
+                  '公開サイト: https://arakawa-suigai-viewer.vercel.app/',
+                  '',
+                  '### 主な変更',
+                  '- 名称を「日暮里・荒川 水害情報ビューア」に統一。',
+                  '- 荒川区の警報・注意報、荒川の氾濫情報、避難情報を表示。',
+                  '- 熊谷・治水橋・岩淵水門の水位を上流から並べ、12時間／5日間の推移と基準水位を表示。',
+                  '- 河川カメラ画像と東京都の笹目橋・浮間橋・小台のライブ映像を集約。',
+                  '- 雨雲、避難・ハザード、交通・ライフライン、公式SNSへの導線を整理。',
+                  '',
+                  `公開版コード: ${releaseSha}`,
+                  'GitHub Releaseの記録を後から追加しています。README・ブランチ整理は後続コミットに含まれます。'
+                ].join('\n')});
+            }
+            // Recheck immediately before deletion; archived refs make the operation recoverable.
+            for (const b of branches) {
+              const current = await ref(`heads/${b.name}`);
+              if (!current) continue;
+              if (current.object.sha !== b.sha) throw new Error(`Branch moved: ${b.name}`);
+              if ((await ref(`tags/archive/${b.name}`))?.object.sha !== b.sha) throw new Error('Archive missing');
+              await github.rest.git.deleteRef({...repo, ref: `heads/${b.name}`});
+              core.info(`Archived and removed ${b.name} (${b.sha})`);
+            }
+            await core.summary.addHeading('v0.8 repository maintenance')
+              .addRaw('Created v0.8 release; preserved all 8 old branch tips under archive/ tags before removing the branches.')
+              .write();
