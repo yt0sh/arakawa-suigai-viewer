@@ -85,3 +85,5 @@ Vercelは `npm run build` を実行し、`dist/` と `api/` を配信します�
 このサイトは公式情報の再表示・集約を目的とした補助サイトです。取得元の更新遅延、通信障害、カメラ配信の停止などが起こり得ます。画面の観測時刻・取得状態を確認し、避難判断は荒川区・気象庁・国土交通省などの公式発表で最終確認してください。
 
 地図・映像・ロゴ・ピクトグラム等の出典は画面内のリンクとフッターに記載しています。
+
+ライフラインの背景アイコンには、Google Material Symbols（bolt）、Tabler（flame filled）、Font Awesome Free（faucet-drip）、Material Design Icons（pipe）を使用しています。出典と利用条件は [アイコンの出典・ライセンス](https://arakawa-suigai-viewer.vercel.app/icon-credits.html) を参照してください。
