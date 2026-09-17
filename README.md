@@ -87,3 +87,8 @@ Vercelは `npm run build` を実行し、`dist/` と `api/` を配信します�
 地図・映像・ロゴ・ピクトグラム等の出典は画面内のリンクとフッターに記載しています。
 
 ライフラインの背景アイコンには、Google Material Symbols（bolt）、Tabler（flame filled）、Font Awesome Free（faucet-drip）、Material Design Icons（pipe）を使用しています。出典と利用条件は [アイコンの出典・ライセンス](https://arakawa-suigai-viewer.vercel.app/icon-credits.html) を参照してください。
+
+
+### アクセス解析
+
+GA4（測定ID `G-T0QZT180EM`）を `public/analytics.js` で読み込みます。本番ホスト `arakawa-suigai-viewer.vercel.app` のみを計測し、localhost・Vercelプレビューは対象外です。Googleシグナルと広告パーソナライズのシグナルを無効にしています。メイン画面とアイコン出典ページに適用しています。
