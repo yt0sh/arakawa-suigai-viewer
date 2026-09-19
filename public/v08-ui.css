@@ -49,7 +49,7 @@
 
 .community-card{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(260px,.8fr);gap:0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
 .community-main{padding:19px 20px}
-.community-service{display:block;color:#52626e;font-size:11px;font-weight:800}
+.community-main>strong{display:block;font-size:13px}
 .community-main>p{margin:10px 0 0;font-size:13px;line-height:1.72;color:#344653}
 .community-join{display:inline-flex;align-items:center;gap:8px;margin-top:15px;padding:10px 14px;border-radius:10px;background:#1aa64a;color:#fff;text-decoration:none;font-size:13px;font-weight:900;box-shadow:0 5px 14px rgba(26,166,74,.18)}
 .community-join:hover{background:#168e3f}
@@ -58,6 +58,9 @@
 .community-about strong{display:block;font-size:13px}
 .community-about p{margin:8px 0 12px;font-size:11px;line-height:1.65;color:#52626e}
 .community-about a{font-size:11px;font-weight:800;color:#176b90}
+
+.apps-section .link-grid a{display:flex;align-items:center;min-height:50px;padding:9px 38px 9px 12px}
+.apps-section .link-grid b{font-size:12px;line-height:1.35}
 
 .history-section{padding-top:0;color:#52626e}
 .history-section .section-heading h2{font-size:16px;color:#344653}
