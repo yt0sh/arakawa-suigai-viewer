@@ -74,7 +74,7 @@
 /* Reuse the same external-link symbol on linked cards, buttons and titles. */
 :is(.link-grid a,.social-profile-card,.live-search-card){position:relative;padding-right:38px}
 :is(.link-grid a,.social-profile-card,.live-search-card,.source-strip a,.station-links a,.btn,.community-join,.community-about a,.radar-title-link)::after{content:"";display:inline-block;width:14px;height:14px;flex:none;margin-left:6px;vertical-align:-2px;background:#a7b1ba;-webkit-mask:url('/external-link.svg') center/contain no-repeat;mask:url('/external-link.svg') center/contain no-repeat;pointer-events:none}
-:is(.link-grid a,.social-profile-card,.live-search-card)::after{position:absolute;top:14px;right:14px;z-index:3;margin:0}
+:is(.link-grid a,.social-profile-card,.live-search-card)::after{position:absolute;top:50%;right:14px;z-index:3;margin:0;transform:translateY(-50%)}
 .community-join::after{background:#d8dfe4;margin-left:0}
 .radar-title-link{display:inline-block;text-decoration:none;border-radius:4px}
 .radar-title-link:hover{color:var(--info)}
