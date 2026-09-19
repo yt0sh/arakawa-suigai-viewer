@@ -1,5 +1,53 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {STATIONS,summarizeWater,normalizeObservations} from '../lib/water.mjs';
+import {createContext,runInContext} from 'node:vm';
+test('status cards distinguish no alerts, active alerts, unknown data and fetch failures',async()=>{
+  const nodes=new Map();
+  const node=id=>{if(!nodes.has(id))nodes.set(id,{textContent:'',className:''});return nodes.get(id)};
+  let payload={},failed=false;
+  const context=createContext({document:{querySelector:node},Intl,Date,AbortController,setTimeout,clearTimeout,
+    fetch:async()=>{if(failed)throw Error('offline');return {ok:true,json:async()=>payload}}});
+  const app=readFileSync(new URL('../public/app.js',import.meta.url),'utf8');
+  runInContext(app.slice(0,app.lastIndexOf('initStations();initRange();')),context);
+  const stamp='2026-09-19T03:04:00Z';
+  context.warning={state:'ok',warnings:[],reportDatetime:null};context.stamp=stamp;
+  runInContext('updateWarning(warning,stamp)',context);
+  assert.equal(node('#weatherStatus').textContent,'警報・注意報なし');
+  assert.match(node('#weatherTime').textContent,/確認 9\/19 12:04/);
+  assert.equal(node('#weatherDetail').textContent,'');
+  context.warning={state:'ok',warnings:[{code:'03',status:'発表'}],reportDatetime:stamp};
+  runInContext('updateWarning(warning,stamp)',context);
+  assert.equal(node('#weatherDot').className,'dot warn');
+  assert.match(node('#weatherDetail').textContent,/大雨警報/);
+  assert.match(node('#weatherTime').textContent,/確認 .*｜発表 /);
+  runInContext('updateWarning(null)',context);
+  assert.equal(node('#weatherStatus').textContent,'取得できません');
+  assert.match(node('#weatherTime').textContent,/取得失敗 /);
+  assert.equal(runInContext('statusTimestamp(null)',context),'確認時刻不明');
+  payload={state:'none',retrievedAt:stamp};await runInContext('loadEvacuation()',context);
+  assert.equal(node('#evacStatus').textContent,'避難指示なし');
+  assert.match(node('#evacTime').textContent,/確認 9\/19 12:04/);
+  for(const [highest,label] of [[3,'高齢者等避難'],[4,'避難指示'],[5,'緊急安全確保']]){
+    payload={state:'active',highest,summary:'対象地域',retrievedAt:stamp};await runInContext('loadEvacuation()',context);
+    assert.equal(node('#evacStatus').textContent,label+' 発令中');
+  }
+  payload={state:'unknown',retrievedAt:stamp};await runInContext('loadEvacuation()',context);
+  assert.equal(node('#evacStatus').textContent,'一部を確認できません');
+  failed=true;await runInContext('loadEvacuation()',context);
+  assert.equal(node('#evacStatus').textContent,'取得できません');
+  assert.match(node('#evacTime').textContent,/取得失敗 /);
+  const flood=readFileSync(new URL('../public/flood-forecast.js',import.meta.url),'utf8').replace('load();setInterval(load,300000);','return load();');
+  failed=false;payload={state:'none',retrievedAt:stamp};await runInContext(flood,context);
+  assert.equal(node('#floodStatus').textContent,'荒川の氾濫情報なし');
+  assert.match(node('#floodTime').textContent,/確認 9\/19 12:04/);
+  payload={state:'active',level:4,label:'氾濫危険情報',headline:'対象地域',retrievedAt:stamp,reportDatetime:stamp};await runInContext(flood,context);
+  assert.equal(node('#floodDot').className,'dot lv4');
+  assert.match(node('#floodTime').textContent,/確認 .*｜発表 /);
+  payload={state:'unknown'};await runInContext(flood,context);
+  assert.equal(node('#floodStatus').textContent,'取得できません');
+  failed=true;await runInContext(flood,context);
+  assert.match(node('#floodTime').textContent,/取得失敗 /);
+});
 test('preview link styling and understated history stay consistent',()=>{
   const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
   const app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8');
@@ -33,7 +81,9 @@ test('water summary returns selected station metadata and exact deltas',()=>{
 });
 test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards and visual link cards',()=>{
   const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),ui=readFileSync(new URL('../dist/v08-ui.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8'),icons=readFileSync(new URL('../dist/card-icons.js',import.meta.url),'utf8'),iconCss=readFileSync(new URL('../dist/card-icons.css',import.meta.url),'utf8'),evacSvg=readFileSync(new URL('../dist/evacuation-area-symbol.svg',import.meta.url),'utf8');
-  assert.match(html,/<title>日暮里・荒川 水害情報ビューア<\/title>/);assert.match(html,/荒川の水位推移・雨雲・避難所・交通情報をひとまとめに/);
+  assert.match(html,/<title>日暮里・荒川 水害情報ビューア<\/title>/);assert.match(html,/地域の水害関連情報をまとめています。最新情報は各リンク先をご確認ください。/);
+  assert.doesNotMatch(html,/class="notice"|status-card-source/);
+  assert.equal((html.match(/class="status-external"/g)||[]).length,3);
   assert.match(html,/bosai\/warning\/#area_type=class20s&amp;area_code=1311800/);
   assert.match(html,/pattern=default&amp;area_type=class20s&amp;area_code=1311800/);
   assert.match(html,/risk\/#zoom:12\/lat:35\.732021\/lon:139\.785919\/colordepth:normal\/elements:flood/);

@@ -8,8 +8,12 @@
 
 .status-visual{position:relative;overflow:hidden;isolation:isolate}
 .status-visual>h2,.status-visual>.status-main,.status-visual>.status-detail,.status-visual>.source-time,.status-visual>.source-link{position:relative;z-index:2}
-.status-card-link{display:block;color:inherit;text-decoration:none;cursor:pointer}
-.status-card-source{pointer-events:none}
+.status-card-link{display:flex;flex-direction:column;min-height:136px;color:inherit;text-decoration:none;cursor:pointer}
+.status-card-link h2{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.status-external{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.status-card-link .status-detail{min-height:0;font-size:11px}
+.status-card-link .status-detail:empty{display:none}
+.status-card-link .source-time{margin-top:auto;padding-top:12px}
 .status-watermark{position:absolute;z-index:0;right:7px;top:50%;width:104px;height:104px;transform:translateY(-50%);opacity:.085;pointer-events:none;color:#6d7d8c}
 .status-watermark svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .status-watermark-image{width:108px;height:108px;opacity:.085;background:url('/evacuation-area-symbol.svg') center/contain no-repeat}
