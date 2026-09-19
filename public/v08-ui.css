@@ -61,6 +61,7 @@
 
 .apps-section .link-grid a{display:flex;align-items:center;min-height:50px;padding:9px 38px 9px 12px}
 .apps-section .link-grid b{font-size:12px;line-height:1.35}
+.apps-section .link-grid a::after{top:50%;transform:translateY(-50%)}
 
 .history-section{padding-top:0;color:#52626e}
 .history-section .section-heading h2{font-size:16px;color:#344653}
@@ -71,6 +72,8 @@
 .history-entry time{font-size:10px;font-weight:800;color:#6a7a85;padding-top:2px}
 .history-entry p{margin:0;font-size:11px;line-height:1.55;color:#667680}
 .history-entry a{color:#176b90}
+.footer p{margin:0 0 8px}
+.footer p:last-child{margin-bottom:0}
 .footer a{text-decoration:underline}
 
 /* Reuse the same external-link symbol on linked cards, buttons and titles. */

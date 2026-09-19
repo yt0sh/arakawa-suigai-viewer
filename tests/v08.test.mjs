@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+import test from 'node:test';import assert from 'node:assert/strict';import {existsSync,readFileSync} from 'node:fs';
 import {STATIONS,summarizeWater,normalizeObservations} from '../lib/water.mjs';
 import {createContext,runInContext} from 'node:vm';
 test('status cards distinguish no alerts, active alerts, unknown data and fetch failures',async()=>{
@@ -122,6 +122,10 @@ test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards an
   assert.doesNotMatch(html,/東京都｜公式配布ページ|荒川区｜公式配布ページ|NHK｜公式案内|Yahoo!防災速報｜公式案内|ゲヒルン｜公式案内/);
   assert.match(html,/style\.css\?v=0\.8\.1/);assert.match(html,/v08-ui\.css\?v=0\.8\.1/);
   assert.match(html,/class="link-grid five"/);assert.match(ui,/\.link-grid\.five/);assert.match(ui,/top:13px;right:13px/);
+  assert.match(ui,/\.apps-section \.link-grid a::after\{top:50%;transform:translateY\(-50%\)\}/);
+  assert.match(html,/CC BY 4\.0<\/a>・一部改変/);assert.match(html,/GitHub｜ソースコード・不具合報告/);
+  assert.doesNotMatch(html,/icon-credits\.html|Prototype v0\.8|Google Sitesはまだ置き換えません/);
+  assert.equal(existsSync(new URL('../dist/icon-credits.html',import.meta.url)),false);
   assert(!html.includes('twitter-timeline'));assert(!html.includes('platform.x.com/widgets.js'));
   assert.match(html,/card-icons\.css/);assert.match(html,/card-icons\.js/);assert.match(html,/v08-ui\.css/);
   for(const mark of ['mark-jr','mark-metro','mark-keisei','mark-toei','mark-electric','mark-gas','mark-water','mark-sewer'])assert.match(icons,new RegExp(mark));
