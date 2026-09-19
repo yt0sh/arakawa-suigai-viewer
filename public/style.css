@@ -13,7 +13,6 @@ a{color:inherit}
 .header{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;margin:6px 0 10px}
 .brand h1{font-size:clamp(24px,4vw,38px);line-height:1.15;margin:0 0 5px;letter-spacing:-.03em}
 .brand p{margin:0;color:var(--muted);font-size:13px}
-.version{flex:0 0 auto;background:#20242a;color:white;padding:6px 10px;border-radius:999px;font-weight:800;font-size:11px}
 .updated{font-size:11px;color:var(--muted);text-align:right;margin:0 2px 10px}
 .notice{border:1px solid #c7d9ee;background:var(--infobg);border-radius:14px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#244c77}
 
@@ -29,7 +28,6 @@ a{color:inherit}
 .status-detail{margin-top:8px;font-size:12px;color:var(--muted);min-height:38px}
 .source-time{display:block;color:var(--muted);font-size:10px;margin-top:7px}
 .source-link,.section-link{display:inline-block;margin-top:8px;font-size:11px;font-weight:800;text-decoration:none;color:var(--info)}
-.source-link:hover,.section-link:hover{text-decoration:underline}
 
 .section-block{margin-top:28px}
 .section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 2px 10px}
@@ -40,7 +38,6 @@ a{color:inherit}
 .segmented button.active{background:#fff;box-shadow:0 1px 5px #0001;font-weight:800}
 .source-strip{display:flex;flex-wrap:wrap;gap:8px;margin:0 2px 12px}
 .source-strip a{display:inline-flex;align-items:center;text-decoration:none;border:1px solid #cbd7e4;background:#f7fbff;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800;color:#245b91}
-.source-strip a:hover{text-decoration:underline}
 
 .water-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .station-card{border-radius:var(--radius);padding:15px;min-width:0}
@@ -74,7 +71,6 @@ a{color:inherit}
 .camera-box img{width:100%;height:100%;object-fit:cover;display:block}
 .station-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .station-links a{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:9px;padding:6px 8px;text-decoration:none;font-size:10px;font-weight:800}
-.station-links a.primary{background:#17191c;color:#fff;border-color:#17191c}
 
 .weather-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:12px}
 .card{border-radius:var(--radius);padding:16px}.card h3{font-size:17px;margin:0}.kicker{font-size:11px;color:var(--muted);margin-top:3px}
@@ -91,11 +87,10 @@ a{color:inherit}
 .weather-links a:after{content:"→";color:var(--info)}
 .btnrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid var(--line);background:white;border-radius:10px;padding:8px 10px;font-size:11px;font-weight:800}
-.btn.primary{background:#17191c;color:white;border-color:#17191c}
 
 .link-grid{display:grid;gap:9px}.link-grid.three{grid-template-columns:repeat(3,1fr)}.link-grid.four{grid-template-columns:repeat(4,1fr)}
 .link-grid a{display:block;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 13px;text-decoration:none;box-shadow:0 4px 14px rgba(20,28,38,.035)}
-.link-grid a:hover{border-color:#aab9c7}.link-grid b{display:block;font-size:13px}.link-grid span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.link-grid b{display:block;font-size:13px}.link-grid span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
 .mini-heading{font-size:12px;color:var(--muted);margin:13px 2px 7px}
 .feed-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.x-feed{min-height:390px;margin:10px 0}.x-feed>p,.secondary-copy{font-size:11px;color:var(--muted)}
 .footer{margin-top:28px;border-top:1px solid var(--line);padding-top:15px;color:var(--muted);font-size:10px}

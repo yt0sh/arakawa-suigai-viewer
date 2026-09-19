@@ -1,5 +1,20 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {STATIONS,summarizeWater,normalizeObservations} from '../lib/water.mjs';
+test('preview link styling and understated history stay consistent',()=>{
+  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
+  const app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8');
+  const ui=readFileSync(new URL('../dist/v08-ui.css',import.meta.url),'utf8');
+  assert.doesNotMatch(html,/<span class="version">/);
+  assert.doesNotMatch(html,/status-card-source">[^<]*→/);
+  assert.doesNotMatch(html,/class="(?:btn )?primary"/);
+  assert.match(app,/data-river[^>]*>観測所情報<\/a>/);
+  assert.doesNotMatch(app,/class="primary"/);
+  const history=html.slice(html.indexOf('<section class="section-block secondary-section history-section">'),html.indexOf('<footer'));
+  assert.doesNotMatch(history,/<h3>/);
+  for(const date of ['2019-10','2021-08','2026-09'])assert.ok(history.includes(date));
+  assert.match(ui,/:is\(\.status-card-link,\.link-grid a,\.social-profile-card,\.live-search-card,\.source-strip a,\.station-links a,\.btn\):hover\{background:#f1f5f8;border-color:#aab9c7;text-decoration:none\}/);
+  assert.doesNotMatch(ui,/translateY\(-1px\)/);
+});
 test('three requested river stations are configured with exact IDs and public links',()=>{
   assert.equal(STATIONS.iwabuchi.id,'303041283309040');assert.equal(STATIONS.chisuibashi.id,'303041283308060');assert.equal(STATIONS.kumagaya.id,'303041283308030');
   assert.equal(STATIONS.iwabuchi.name,'岩淵水門');

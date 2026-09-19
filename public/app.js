@@ -20,7 +20,7 @@ function stationCard(st){
   <div class="micro" data-delta>10分・1時間の変化を取得中</div>
   <div class="chart" data-chart><div class="chart-placeholder">水位データ取得中</div></div>
   <div class="micro" data-chart-note></div>
-  <div class="camera-panel"><div class="camera-head"><b>ライブカメラ</b><small data-camera-meta>画像取得中</small></div><div class="camera-box" data-camera>画像取得中</div><div class="station-links"><a class="primary" data-river target="_blank" rel="noopener noreferrer">川の防災情報</a><a data-camera-link target="_blank" rel="noopener noreferrer">カメラ原典</a></div></div>`;
+  <div class="camera-panel"><div class="camera-head"><b>ライブカメラ</b><small data-camera-meta>画像取得中</small></div><div class="camera-box" data-camera>画像取得中</div><div class="station-links"><a data-river target="_blank" rel="noopener noreferrer">観測所情報</a><a data-camera-link target="_blank" rel="noopener noreferrer">カメラ原典</a></div></div>`;
   a.querySelector('h3').textContent=st.name;a.querySelector('.station-loc').textContent=st.location;a.querySelector('.station-id').textContent='観測所 '+st.id;
   a.querySelector('[data-river]').href=st.riverUrl;a.querySelector('[data-camera-link]').href=st.cameraUrl;
   return a
