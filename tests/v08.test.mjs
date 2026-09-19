@@ -113,6 +113,12 @@ test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards an
   assert.equal((html.match(/youtube-nocookie\.com\/embed\//g)||[]).length,3);assert.equal((html.match(/camera-only-card/g)||[]).length,3);
   for(const handle of ['Kantei_Saigai','tokyo_bousai','arakawakukoho','mlit_arakawa_ka'])assert.match(html,new RegExp('x\\.com/'+handle));
   assert.equal((html.match(/class="social-profile-card"/g)||[]).length,4);assert.equal((html.match(/https:\/\/unavatar\.io\/x\//g)||[]).length,4);
+  assert.match(html,/Xの地域関連投稿/);assert.doesNotMatch(html,/地域のリアルタイム投稿|リアルタイム検索|live-search-badge/);
+  assert.match(html,/LINE オープンチャット/);assert.doesNotMatch(html,/LINE OPENCHAT|2019年10月、巨大台風の接近時に/);
+  assert.match(html,/荒川区災害情報サイト　避難場所・避難所/);assert.match(html,/荒川区 &gt; 防災 &gt; 水害に備えて/);
+  assert.match(html,/documentsarakawasuigai-omote\.pdf/);assert.match(html,/荒川区防災地図\(水害版\) \(PDF\)/);
+  for(const appName of ['東京都防災アプリ','荒川防災アプリ','NHK ONE ニュース・防災アプリ','Yahoo!防災速報','特務機関NERV防災アプリ'])assert.match(html,new RegExp(appName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
+  assert.match(html,/class="link-grid five"/);assert.match(ui,/\.link-grid\.five/);assert.match(ui,/top:13px;right:13px/);
   assert(!html.includes('twitter-timeline'));assert(!html.includes('platform.x.com/widgets.js'));
   assert.match(html,/card-icons\.css/);assert.match(html,/card-icons\.js/);assert.match(html,/v08-ui\.css/);
   for(const mark of ['mark-jr','mark-metro','mark-keisei','mark-toei','mark-electric','mark-gas','mark-water','mark-sewer'])assert.match(icons,new RegExp(mark));
