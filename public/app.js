@@ -10,6 +10,10 @@ const COLORS={normal:'#d9efff',standby:'#dff3e4',advisory:'#fff2b8',evacuation:'
 const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
 const fmt=t=>{const d=new Date(t);return Number.isFinite(d.getTime())?new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Tokyo'}).format(d):'時刻不明'};
 function dot(id,kind=''){const el=q(id);if(el)el.className='dot '+kind}
+function statusTimestamp(retrievedAt,reportDatetime){
+  const valid=t=>t&&Number.isFinite(new Date(t).getTime());
+  return (valid(retrievedAt)?'確認 '+fmt(retrievedAt):'確認時刻不明')+(valid(reportDatetime)?'｜発表 '+fmt(reportDatetime):'');
+}
 async function jsonFetch(url,timeout=12000){const c=new AbortController(),timer=setTimeout(()=>c.abort(),timeout);try{const r=await fetch(url,{cache:'no-store',signal:c.signal});if(!r.ok)throw Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(timer)}}
 function stationCard(st){
   const a=document.createElement('article');a.className='station-card';a.dataset.station=st.key;
@@ -20,7 +24,7 @@ function stationCard(st){
   <div class="micro" data-delta>10分・1時間の変化を取得中</div>
   <div class="chart" data-chart><div class="chart-placeholder">水位データ取得中</div></div>
   <div class="micro" data-chart-note></div>
-  <div class="camera-panel"><div class="camera-head"><b>ライブカメラ</b><small data-camera-meta>画像取得中</small></div><div class="camera-box" data-camera>画像取得中</div><div class="station-links"><a class="primary" data-river target="_blank" rel="noopener noreferrer">川の防災情報</a><a data-camera-link target="_blank" rel="noopener noreferrer">カメラ原典</a></div></div>`;
+  <div class="camera-panel"><div class="camera-head"><b>ライブカメラ</b><small data-camera-meta>画像取得中</small></div><div class="camera-box" data-camera>画像取得中</div><div class="station-links"><a data-river target="_blank" rel="noopener noreferrer">観測所情報</a><a data-camera-link target="_blank" rel="noopener noreferrer">カメラ原典</a></div></div>`;
   a.querySelector('h3').textContent=st.name;a.querySelector('.station-loc').textContent=st.location;a.querySelector('.station-id').textContent='観測所 '+st.id;
   a.querySelector('[data-river]').href=st.riverUrl;a.querySelector('[data-camera-link]').href=st.cameraUrl;
   return a
@@ -84,13 +88,20 @@ function loadCamera(st){
   box.replaceChildren(img);meta.textContent='画像取得中'
 }
 async function loadEvacuation(){
-  try{const d=await jsonFetch('/api/evacuation');if(d.state==='error')throw Error();let label,kind;if(d.state==='active'){label=`警戒レベル${d.highest} 発令中`;kind='warn'}else if(d.state==='none'){label='対象地区なし';kind='ok'}else{label='一部を確認できません';kind=''}q('#evacStatus').textContent=label;q('#evacDetail').textContent=d.summary||'公式発表を確認してください';dot('#evacDot',kind);q('#evacTime').textContent='区サイト確認 '+fmt(d.retrievedAt)}catch{q('#evacStatus').textContent='取得できません';q('#evacDetail').textContent='荒川区公式で発令状況を確認してください。';dot('#evacDot');q('#evacTime').textContent=''}
+  try{
+    const d=await jsonFetch('/api/evacuation');if(d.state==='error')throw Error();
+    let label,kind,detail=d.summary||'公式発表を確認してください';
+    if(d.state==='active'){label=({3:'高齢者等避難 発令中',4:'避難指示 発令中',5:'緊急安全確保 発令中'})[d.highest]||'避難情報 発令中';kind='warn'}
+    else if(d.state==='none'){label='避難指示なし';kind='ok';detail='高齢者等避難・緊急安全確保も発令なし'}
+    else{label='一部を確認できません';kind=''}
+    q('#evacStatus').textContent=label;q('#evacDetail').textContent=detail;dot('#evacDot',kind);q('#evacTime').textContent=statusTimestamp(d.retrievedAt);
+  }catch{q('#evacStatus').textContent='取得できません';q('#evacDetail').textContent='荒川区公式で発令状況を確認してください。';dot('#evacDot');q('#evacTime').textContent='取得失敗 '+fmt(Date.now())}
 }
-function updateWarning(w){
-  if(!w||w.state!=='ok'){q('#weatherStatus').textContent='取得できません';q('#weatherDetail').textContent='気象庁の公式画面を確認してください。';dot('#weatherDot');q('#weatherTime').textContent='';return}
+function updateWarning(w,retrievedAt){
+  if(!w||w.state!=='ok'){q('#weatherStatus').textContent='取得できません';q('#weatherDetail').textContent='気象庁の公式画面を確認してください。';dot('#weatherDot');q('#weatherTime').textContent='取得失敗 '+fmt(Date.now());return}
   const active=(w.warnings||[]).filter(x=>x.code&&!String(x.status||'').includes('解除')),unknown=active.filter(x=>!WARNING_NAMES[x.code]);let label,detail,kind;
-  if(!active.length){label='発表なし';detail='取得できた警報一覧に、発表中の警報・注意報はありません。';kind='ok'}else{const severe=active.some(x=>WARNING_CODES.has(x.code)||!WARNING_NAMES[x.code]);label=severe?'警報等発表中':'注意報発表中';detail=active.map(x=>WARNING_NAMES[x.code]||('未対応コード '+x.code)).join(' / ');if(unknown.length)detail+='（名称未対応。公式画面で確認）';kind=severe?'warn':'adv'}
-  q('#weatherStatus').textContent=label;q('#weatherDetail').textContent=detail;dot('#weatherDot',kind);q('#weatherTime').textContent=w.reportDatetime?'気象庁発表 '+fmt(w.reportDatetime):''
+  if(!active.length){label='警報・注意報なし';detail='';kind='ok'}else{const severe=active.some(x=>WARNING_CODES.has(x.code)||!WARNING_NAMES[x.code]);label=severe?'警報等発表中':'注意報発表中';detail=active.map(x=>WARNING_NAMES[x.code]||('未対応コード '+x.code)).join(' / ');if(unknown.length)detail+='（名称未対応。公式画面で確認）';kind=severe?'warn':'adv'}
+  q('#weatherStatus').textContent=label;q('#weatherDetail').textContent=detail;dot('#weatherDot',kind);q('#weatherTime').textContent=statusTimestamp(retrievedAt,w.reportDatetime)
 }
 function updateForecast(f){
   if(!f||f.state!=='ok'){q('#forecastText').textContent='予報を取得できません';q('#forecastPop').textContent='気象庁の荒川区ページを確認してください。';return}
@@ -101,7 +112,7 @@ function tileXY(lat,lon,z){const n=2**z,r=lat*Math.PI/180;return{x:(lon+180)/360
 function tile(parent,src,dx,dy,cls){const im=document.createElement('img');im.className='tile '+cls;im.alt='';im.loading='eager';im.style.left=((dx+1)*33.3334)+'%';im.style.top=((dy+1)*33.3334)+'%';im.src=src;parent.append(im);return im}
 async function updateRadar(r){
   const box=q('#radar'),err=q('#radarError');
-  if(!r||r.state!=='ok'){err.style.display='flex';q('#radarLabel').textContent='降水レイヤーを取得できません';return}
+  if(!r||r.state!=='ok'){err.style.display='flex';q('#radarLabel').textContent='雨雲の時刻を取得できません';return}
   const z=CONFIG.radarZoom,p=tileXY(CONFIG.center.lat,CONFIG.center.lon,z),cx=Math.floor(p.x),cy=Math.floor(p.y),old=qa('#radar .tile'),added=[];let radarFail=0,baseFail=0;
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=cx+dx,y=cy+dy;
     const base=tile(box,`https://cyberjapandata.gsi.go.jp/xyz/std/${z}/${x}/${y}.png`,dx,dy,'base-tile');
@@ -109,10 +120,10 @@ async function updateRadar(r){
   }
   await Promise.all(added.map(([im,kind])=>new Promise(resolve=>{let done=false;const finish=ok=>{if(done)return;done=true;if(!ok){if(kind==='radar')radarFail++;else baseFail++}resolve()};im.onload=()=>finish(true);im.onerror=()=>finish(false);setTimeout(()=>finish(!!im.naturalWidth),8000)})));
   old.forEach(x=>x.remove());err.style.display=radarFail===9?'flex':'none';q('#radarMarker').style.left=((1+p.x-cx)/3*100)+'%';q('#radarMarker').style.top=((1+p.y-cy)/3*100)+'%';
-  q('#radarLabel').textContent='気象庁 降水レイヤー｜'+fmt(r.timestamp)+(radarFail?'｜一部取得失敗':'')+(baseFail?'｜地図 一部取得失敗':'')
+  q('#radarLabel').textContent=radarFail===9?'雨雲画像を取得できません':(r.timestamp&&Number.isFinite(new Date(r.timestamp).getTime())?fmt(r.timestamp)+' 時点の雨雲（気象庁）':'雨雲の時刻不明')+(radarFail?'｜一部取得失敗':'')+(baseFail?'｜地図 一部取得失敗':'')
 }
 async function loadJma(){
-  try{const d=await jsonFetch('/api/jma',15000);updateWarning(d.warning);updateForecast(d.forecast);await updateRadar(d.radar)}catch{updateWarning(null);updateForecast(null);await updateRadar(null)}
+  try{const d=await jsonFetch('/api/jma',15000);updateWarning(d.warning,d.retrievedAt);updateForecast(d.forecast);await updateRadar(d.radar)}catch{updateWarning(null);updateForecast(null);await updateRadar(null)}
 }
 function loadX(){const s=document.createElement('script');s.async=true;s.src='https://platform.x.com/widgets.js';s.charset='utf-8';s.onerror=()=>{const p=q('#xFeed > p');if(p)p.textContent='Xの埋め込みを読み込めませんでした。直接リンクから確認してください。'};document.head.append(s)}
 function initRange(){qa('[data-range]').forEach(b=>b.addEventListener('click',()=>{chartHours=Number(b.dataset.range);qa('[data-range]').forEach(x=>x.classList.toggle('active',x===b));for(const st of STATIONS){const d=waterData.get(st.key),card=q(`[data-station="${st.key}"]`);if(d)drawChart(card,d)}}))}

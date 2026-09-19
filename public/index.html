@@ -10,55 +10,50 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=05" sizes="any">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=05-ios1">
   <title>日暮里・荒川 水害情報ビューア</title>
-  <link rel="stylesheet" href="/style.css?v=0.8.0">
-  <link rel="stylesheet" href="/card-icons.css?v=0.8.0">
-  <link rel="stylesheet" href="/v08-ui.css?v=0.8.0">
+  <link rel="stylesheet" href="/style.css?v=0.8.1">
+  <link rel="stylesheet" href="/card-icons.css?v=0.8.1">
+  <link rel="stylesheet" href="/v08-ui.css?v=0.8.1">
 </head>
 <body>
 <main class="wrap">
   <header class="header">
     <div class="brand">
       <h1>日暮里・荒川 水害情報ビューア</h1>
-      <p>荒川の水位推移・雨雲・避難所・交通情報をひとまとめに</p>
+      <p>地域の水害関連情報をまとめています。最新情報は各リンク先をご確認ください。</p>
     </div>
-    <span class="version">v0.8 preview</span>
   </header>
 
   <div class="updated" id="updated">読込中…</div>
-  <div class="notice">この画面は公式情報を見やすく集約する補助サイトです。避難判断は必ず荒川区・気象庁・国土交通省の最新発表で確認してください。</div>
 
   <section class="emergency" aria-label="最重要情報">
     <a class="status-card status-visual status-card-link status-weather" href="https://www.jma.go.jp/bosai/warning/#area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">
       <span class="status-watermark" aria-hidden="true">
         <svg viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0"/><path d="M12 16h.01"/></svg>
       </span>
-      <h2>気象庁｜警報・注意報（荒川区）</h2>
+      <h2>気象庁｜警報・注意報（荒川区）<svg class="status-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg></h2>
       <div class="status-main"><i id="weatherDot" class="dot"></i><span id="weatherStatus">取得中</span></div>
       <div class="status-detail" id="weatherDetail">気象庁の情報を確認中</div>
-      <small class="source-time" id="weatherTime"></small>
-      <span class="source-link status-card-source">気象庁｜荒川区の警報・注意報 →</span>
+      <small class="source-time" id="weatherTime">確認中…</small>
     </a>
 
     <a class="status-card status-visual status-card-link status-flood" id="floodForecastCard" href="https://www.jma.go.jp/bosai/flood/" target="_blank" rel="noopener noreferrer">
       <span class="status-watermark" aria-hidden="true">
         <svg viewBox="0 0 24 24"><path d="M3 10l9 -7l9 7"/><path d="M6 7.75v4.25m12 0v-4.25"/><path d="M3 20.75a2.4 2.4 0 0 0 1 .25a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 1 -.25"/><path d="M3 16.75a2.4 2.4 0 0 0 1 .25a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 1 -.25"/></svg>
       </span>
-      <h2>気象庁｜荒川の氾濫情報</h2>
+      <h2>気象庁｜荒川の氾濫情報<svg class="status-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg></h2>
       <div class="status-main"><i id="floodDot" class="dot"></i><span id="floodStatus">取得中</span></div>
       <div class="status-detail" id="floodDetail">指定河川洪水予報の発表状況を確認中</div>
-      <small class="source-time" id="floodTime"></small>
-      <span class="source-link status-card-source">気象庁｜指定河川洪水予報 →</span>
+      <small class="source-time" id="floodTime">確認中…</small>
     </a>
 
     <a class="status-card status-visual status-card-link status-evacuation" href="https://bosai.city.arakawa.tokyo.jp/hinan/hinan-siji.html" target="_blank" rel="noopener noreferrer">
       <span class="status-watermark status-watermark-image" aria-hidden="true">
         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Safety_evacuation_area.svg" alt="" loading="lazy" decoding="async">
       </span>
-      <h2>荒川区｜避難情報</h2>
+      <h2>荒川区｜避難情報<svg class="status-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></svg></h2>
       <div class="status-main"><i id="evacDot" class="dot"></i><span id="evacStatus">取得中</span></div>
       <div class="status-detail" id="evacDetail">警戒レベル3・4・5を確認中</div>
-      <small class="source-time" id="evacTime"></small>
-      <span class="source-link status-card-source">荒川区｜発令区域 →</span>
+      <small class="source-time" id="evacTime">確認中…</small>
     </a>
   </section>
 
@@ -66,7 +61,7 @@
     <div class="section-heading">
       <div>
         <h2>荒川の水位・ライブカメラ</h2>
-        <p>上流から熊谷・治水橋・岩淵水門を並べて水位変化を確認</p>
+        <p>熊谷・治水橋・岩淵水門の水位推移とライブ映像</p>
       </div>
       <div>
         <div class="micro" style="margin:0 0 4px">表示期間切り替え</div>
@@ -90,15 +85,15 @@
     <div class="water-grid camera-stations-grid" aria-label="東京都水防ライブカメラ">
       <article class="station-card camera-only-card">
         <div class="station-head"><div><h3>笹目橋</h3><div class="station-loc">新河岸川｜板橋区高島平</div></div><div class="station-id">映像監視局 226001</div></div>
-        <div class="camera-panel"><div class="camera-head"><b>ライブ映像</b><small>東京都水防チャンネル</small></div><div class="camera-box youtube-camera"><iframe src="https://www.youtube-nocookie.com/embed/_dA2jB2NEZw?rel=0&amp;playsinline=1" title="笹目橋 ライブカメラ" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="station-links"><a class="primary" href="https://www.kasen-suibo.metro.tokyo.lg.jp/im/uryosuii/tsim0105g_226001.html?lat=35.79621111111111&amp;lng=139.64595555555556&amp;tgid=226001" target="_blank" rel="noopener noreferrer">東京都 水防災情報</a><a href="https://www.youtube.com/watch?v=_dA2jB2NEZw" target="_blank" rel="noopener noreferrer">YouTubeで開く</a></div></div>
+        <div class="camera-panel"><div class="camera-head"><b>ライブ映像</b><small>東京都水防チャンネル</small></div><div class="camera-box youtube-camera"><iframe src="https://www.youtube-nocookie.com/embed/_dA2jB2NEZw?rel=0&amp;playsinline=1" title="笹目橋 ライブカメラ" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="station-links"><a href="https://www.kasen-suibo.metro.tokyo.lg.jp/im/uryosuii/tsim0105g_226001.html?lat=35.79621111111111&amp;lng=139.64595555555556&amp;tgid=226001" target="_blank" rel="noopener noreferrer">東京都 水防災情報</a><a href="https://www.youtube.com/watch?v=_dA2jB2NEZw" target="_blank" rel="noopener noreferrer">YouTubeで開く</a></div></div>
       </article>
       <article class="station-card camera-only-card">
         <div class="station-head"><div><h3>浮間橋</h3><div class="station-loc">新河岸川｜北区浮間</div></div><div class="station-id">映像監視局 226008</div></div>
-        <div class="camera-panel"><div class="camera-head"><b>ライブ映像</b><small>東京都水防チャンネル</small></div><div class="camera-box youtube-camera"><iframe src="https://www.youtube-nocookie.com/embed/ec8nY1JZ6zA?rel=0&amp;playsinline=1" title="浮間橋 ライブカメラ" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="station-links"><a class="primary" href="https://www.kasen-suibo.metro.tokyo.lg.jp/im/uryosuii/tsim0105g_226008.html?lat=35.788126388888884&amp;lng=139.7066786111111&amp;tgid=226008" target="_blank" rel="noopener noreferrer">東京都 水防災情報</a><a href="https://www.youtube.com/watch?v=ec8nY1JZ6zA" target="_blank" rel="noopener noreferrer">YouTubeで開く</a></div></div>
+        <div class="camera-panel"><div class="camera-head"><b>ライブ映像</b><small>東京都水防チャンネル</small></div><div class="camera-box youtube-camera"><iframe src="https://www.youtube-nocookie.com/embed/ec8nY1JZ6zA?rel=0&amp;playsinline=1" title="浮間橋 ライブカメラ" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="station-links"><a href="https://www.kasen-suibo.metro.tokyo.lg.jp/im/uryosuii/tsim0105g_226008.html?lat=35.788126388888884&amp;lng=139.7066786111111&amp;tgid=226008" target="_blank" rel="noopener noreferrer">東京都 水防災情報</a><a href="https://www.youtube.com/watch?v=ec8nY1JZ6zA" target="_blank" rel="noopener noreferrer">YouTubeで開く</a></div></div>
       </article>
       <article class="station-card camera-only-card">
         <div class="station-head"><div><h3>小台</h3><div class="station-loc">隅田川｜荒川区町屋</div></div><div class="station-id">映像監視局 203001</div></div>
-        <div class="camera-panel"><div class="camera-head"><b>ライブ映像</b><small>東京都水防チャンネル</small></div><div class="camera-box youtube-camera"><iframe src="https://www.youtube-nocookie.com/embed/pmTFyDvr4l4?rel=0&amp;playsinline=1" title="小台 ライブカメラ" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="station-links"><a class="primary" href="https://www.kasen-suibo.metro.tokyo.lg.jp/im/uryosuii/tsim0105g_203001.html?lat=35.753194444444446&amp;lng=139.78197222222224&amp;tgid=203001" target="_blank" rel="noopener noreferrer">東京都 水防災情報</a><a href="https://www.youtube.com/watch?v=pmTFyDvr4l4" target="_blank" rel="noopener noreferrer">YouTubeで開く</a></div></div>
+        <div class="camera-panel"><div class="camera-head"><b>ライブ映像</b><small>東京都水防チャンネル</small></div><div class="camera-box youtube-camera"><iframe src="https://www.youtube-nocookie.com/embed/pmTFyDvr4l4?rel=0&amp;playsinline=1" title="小台 ライブカメラ" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="station-links"><a href="https://www.kasen-suibo.metro.tokyo.lg.jp/im/uryosuii/tsim0105g_203001.html?lat=35.753194444444446&amp;lng=139.78197222222224&amp;tgid=203001" target="_blank" rel="noopener noreferrer">東京都 水防災情報</a><a href="https://www.youtube.com/watch?v=pmTFyDvr4l4" target="_blank" rel="noopener noreferrer">YouTubeで開く</a></div></div>
       </article>
     </div>
   </section>
@@ -106,23 +101,20 @@
   <section class="section-block weather-section">
     <div class="section-heading">
       <div>
-        <h2>荒川区の天気・雨雲</h2>
-        <p>現在の降水域を広域で確認</p>
+        <h2>天気・雨雲</h2>
+        <p>荒川区周辺の降水域と雨雲の動き</p>
       </div>
-      <a class="section-link" href="https://www.jma.go.jp/bosai/#pattern=default&amp;area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">気象庁｜荒川区の天気 →</a>
     </div>
     <div class="weather-grid single">
       <article class="card radar-card">
-        <h3>荒川区周辺の雨雲</h3>
-        <div class="kicker">地図：国土地理院（グレースケール・薄表示）／降水レイヤー：気象庁「雨雲の動き」（60%表示）</div>
+        <h3><a class="radar-title-link" href="https://www.jma.go.jp/bosai/#pattern=default&amp;area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">荒川区周辺の雨雲</a></h3>
+        <div class="source-time radar-time" id="radarLabel" aria-live="polite">雨雲の時刻を確認中…</div>
         <div class="radar" id="radar">
           <span class="radar-marker" id="radarMarker"></span>
-          <span class="radar-label" id="radarLabel">降水レイヤー取得中</span>
           <div class="radar-error" id="radarError">雨雲画像を取得できません。気象庁の公式画面を確認してください。</div>
         </div>
-        <div class="micro">背景地図はグレースケールで薄く表示し、気象庁の降水強度レイヤーを重ねています。降水がない場所は透明になります。</div>
         <div class="btnrow">
-          <a class="btn primary" href="https://www.jma.go.jp/bosai/nowc/" target="_blank" rel="noopener noreferrer">気象庁｜雨雲の動き</a>
+          <a class="btn" href="https://www.jma.go.jp/bosai/nowc/" target="_blank" rel="noopener noreferrer">気象庁｜雨雲の動き</a>
           <a class="btn" href="https://www.jma.go.jp/bosai/risk/#zoom:12/lat:35.732021/lon:139.785919/colordepth:normal/elements:flood" target="_blank" rel="noopener noreferrer">洪水キキクル</a>
         </div>
       </article>
@@ -133,14 +125,14 @@
   <section class="section-block compact-section">
     <div class="section-heading">
       <div>
-        <h2>避難・ハザード</h2>
-        <p>地域を固定せず、荒川区の公式一覧から現在地に合う避難先を確認</p>
+        <h2>荒川区の避難情報</h2>
+        <p>避難所の開設状況・水害時の避難先・浸水想定</p>
       </div>
     </div>
     <nav class="link-grid three" aria-label="避難とハザードマップ">
-      <a href="https://bosai.city.arakawa.tokyo.jp/hinan/hinanjyo-ichiran.html" target="_blank" rel="noopener noreferrer"><b>避難所の開設状況</b><span>荒川区 公式一覧</span></a>
-      <a href="https://www.city.arakawa.tokyo.jp/a013/bousai/suigainisonaete/hinannbasuoitirann.html" target="_blank" rel="noopener noreferrer"><b>水害時の避難場所</b><span>指定階層・施設一覧</span></a>
-      <a href="https://www.city.arakawa.tokyo.jp/a013/bousai/suigainisonaete/suigaimap.html" target="_blank" rel="noopener noreferrer"><b>水害ハザードマップ</b><span>浸水深・浸水継続時間</span></a>
+      <a href="https://bosai.city.arakawa.tokyo.jp/hinan/hinanjyo-ichiran.html" target="_blank" rel="noopener noreferrer"><b>避難所の開設状況</b><span>荒川区災害情報サイト　避難場所・避難所</span></a>
+      <a href="https://www.city.arakawa.tokyo.jp/a013/bousai/suigainisonaete/hinannbasuoitirann.html" target="_blank" rel="noopener noreferrer"><b>水害時の避難場所</b><span>荒川区 &gt; 防災 &gt; 水害に備えて</span></a>
+      <a href="https://www.city.arakawa.tokyo.jp/documents/576/documentsarakawasuigai-omote.pdf" target="_blank" rel="noopener noreferrer"><b>水害ハザードマップ</b><span>荒川区防災地図(水害版) (PDF)</span></a>
     </nav>
   </section>
 
@@ -148,7 +140,7 @@
     <div class="section-heading">
       <div>
         <h2>交通・ライフライン</h2>
-        <p>状況は各事業者の公式サイトで直接確認</p>
+        <p>電車の運行状況と停電・断水などのライフライン情報</p>
       </div>
     </div>
 
@@ -173,18 +165,109 @@
     <div class="section-heading">
       <div>
         <h2>SNS</h2>
-        <p>災害時に確認したい公式Xアカウント</p>
+        <p>公式情報、地域の最新投稿、住民同士の情報共有</p>
       </div>
     </div>
+    <h3 class="mini-heading social-subheading">公式Xアカウント</h3>
     <div class="social-grid social-profile-grid">
-      <article class="card social-card"><a class="social-profile-card" href="https://x.com/Kantei_Saigai" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">官</span><img src="https://unavatar.io/x/Kantei_Saigai" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>首相官邸</strong><span>@Kantei_Saigai</span><small>災害・危機管理情報</small></span><span class="social-arrow" aria-hidden="true">↗</span></a></article>
-      <article class="card social-card"><a class="social-profile-card" href="https://x.com/tokyo_bousai" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">都</span><img src="https://unavatar.io/x/tokyo_bousai" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>東京都防災</strong><span>@tokyo_bousai</span><small>東京都の防災・災害情報</small></span><span class="social-arrow" aria-hidden="true">↗</span></a></article>
-      <article class="card social-card"><a class="social-profile-card" href="https://x.com/arakawakukoho" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">荒</span><img src="https://unavatar.io/x/arakawakukoho" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>荒川区</strong><span>@arakawakukoho</span><small>区政・防災情報</small></span><span class="social-arrow" aria-hidden="true">↗</span></a></article>
-      <article class="card social-card"><a class="social-profile-card" href="https://x.com/mlit_arakawa_ka" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">荒</span><img src="https://unavatar.io/x/mlit_arakawa_ka" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>荒川下流河川事務所</strong><span>@mlit_arakawa_ka</span><small>国土交通省｜荒川下流の河川情報</small></span><span class="social-arrow" aria-hidden="true">↗</span></a></article>
+      <article class="card social-card"><a class="social-profile-card" href="https://x.com/Kantei_Saigai" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">官</span><img src="https://unavatar.io/x/Kantei_Saigai" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>首相官邸</strong><span>@Kantei_Saigai</span><small>災害・危機管理情報</small></span></a></article>
+      <article class="card social-card"><a class="social-profile-card" href="https://x.com/tokyo_bousai" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">都</span><img src="https://unavatar.io/x/tokyo_bousai" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>東京都防災</strong><span>@tokyo_bousai</span><small>東京都の防災・災害情報</small></span></a></article>
+      <article class="card social-card"><a class="social-profile-card" href="https://x.com/arakawakukoho" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">荒</span><img src="https://unavatar.io/x/arakawakukoho" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>荒川区</strong><span>@arakawakukoho</span><small>区政・防災情報</small></span></a></article>
+      <article class="card social-card"><a class="social-profile-card" href="https://x.com/mlit_arakawa_ka" target="_blank" rel="noopener noreferrer"><span class="social-avatar"><span class="social-avatar-fallback">荒</span><img src="https://unavatar.io/x/mlit_arakawa_ka" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span><span class="social-profile-copy"><strong>荒川下流河川事務所</strong><span>@mlit_arakawa_ka</span><small>国土交通省｜荒川下流の河川情報</small></span></a></article>
+    </div>
+
+    <h3 class="mini-heading social-subheading">地域名を含むつぶやき</h3>
+    <a class="live-search-card" href="https://x.com/search?q=%22%E8%8D%92%E5%B7%9D%E5%8C%BA%22%20OR%20%22%E6%97%A5%E6%9A%AE%E9%87%8C%22%20OR%20%23%E8%8D%92%E5%B7%9D%E5%8C%BA%20OR%20%40i&amp;src=typed_query&amp;f=live" target="_blank" rel="noopener noreferrer">
+      <span class="live-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.6"/><path d="m16 16 4.2 4.2"/></svg></span>
+      <span class="live-search-copy"><strong>Xで「荒川区」「日暮里」の最新投稿を見る</strong><span>「荒川区」「日暮里」を含む投稿を新着順で表示</span></span>
+    </a>
+
+    <h3 class="mini-heading social-subheading">住民同士の情報交換</h3>
+    <article class="community-card">
+      <div class="community-main">
+        <strong>LINE オープンチャット</strong>
+        <p>日暮里・荒川区周辺の状況を住民同士で共有するために開設しました。</p>
+        <p>水害のおそれが高まったときに、身の回りの状況や避難所・道路・交通・ライフラインの情報を伝え合う場です。</p>
+        <p>公的機関の情報とは別に、地域の人が目の前で確認した状況を速報的に共有します。互いの判断や行動を助けることが目的です。</p>
+        <a class="community-join" href="https://line.me/ti/g2/JLHQayOVYPWqdhcOWgKxUQ" target="_blank" rel="noopener noreferrer" aria-label="荒川区・日暮里 水害情報共有に参加する">「荒川区・日暮里｜水害情報共有」に参加する</a>
+        <p class="community-note">※参加・退会はいつでも自由です。過去の情報交換もそのままご覧いただけます。投稿は参加者による情報共有であり、内容が正確とは限りません。避難の判断は、荒川区・気象庁などの公式発表を優先してください。</p>
+      </div>
+      <aside class="community-about">
+        <strong>LINEオープンチャットとは</strong>
+        <p>LINEの連絡先を交換せず、トークルーム専用のプロフィールで参加できるグループトーク機能です。LINE公式でも災害時の活用を紹介しています。</p>
+        <a href="https://openchat-jp.line.me/topic/20200707_bousai3" target="_blank" rel="noopener noreferrer">LINE公式｜災害時の活用例</a>
+      </aside>
+    </article>
+  </section>
+
+  <section class="section-block compact-section apps-section">
+    <div class="section-heading">
+      <div>
+        <h2>防災アプリ</h2>
+        <p>災害情報・避難情報・緊急通知をスマートフォンで</p>
+      </div>
+    </div>
+    <nav class="link-grid five" aria-label="防災アプリ">
+      <a href="https://www.bousai.metro.tokyo.lg.jp/1028747/index.html" target="_blank" rel="noopener noreferrer"><b>東京都防災アプリ</b></a>
+      <a href="https://www.city.arakawa.tokyo.jp/a013/bousai/dentatsushudan/bousaiapuri.html" target="_blank" rel="noopener noreferrer"><b>荒川防災アプリ</b></a>
+      <a href="https://www.nhk.or.jp/nhkone/service/app/news_bousai/" target="_blank" rel="noopener noreferrer"><b>NHK ONE ニュース・防災アプリ</b></a>
+      <a href="https://emg.yahoo.co.jp/" target="_blank" rel="noopener noreferrer"><b>Yahoo! 防災アプリ</b></a>
+      <a href="https://nerv.app/" target="_blank" rel="noopener noreferrer"><b>特務機関 NERV防災アプリ</b></a>
+    </nav>
+  </section>
+
+  <section class="section-block secondary-section history-section">
+    <div class="section-heading">
+      <div>
+        <h2>このサイトの歩み</h2>
+        <p>大雨の際に活用し、その都度必要な情報を見直しています。</p>
+      </div>
+    </div>
+    <div class="history-timeline">
+      <article class="history-entry">
+        <time datetime="2019-10">2019年10月</time>
+        <div><p><a href="https://ja.wikipedia.org/wiki/%E4%BB%A4%E5%92%8C%E5%85%83%E5%B9%B4%E6%9D%B1%E6%97%A5%E6%9C%AC%E5%8F%B0%E9%A2%A8" target="_blank" rel="noopener noreferrer">令和元年東日本台風（台風第19号）</a>の接近をきっかけに、日暮里・荒川区周辺の水害情報をまとめるサイトとLINEオープンチャットを開設しました。</p></div>
+      </article>
+      <article class="history-entry">
+        <time datetime="2021-08">2021年8月</time>
+        <div><p><a href="https://ja.wikipedia.org/wiki/%E4%BB%A4%E5%92%8C3%E5%B9%B48%E6%9C%88%E3%81%AE%E5%A4%A7%E9%9B%A8" target="_blank" rel="noopener noreferrer">令和3年8月の大雨</a>に合わせて更新しました。</p></div>
+      </article>
+      <article class="history-entry">
+        <time datetime="2026-09">2026年9月</time>
+        <div><p>大雨を機に、河川水位、ライブカメラ、雨雲、避難、交通、ライフラインなどの情報を大幅に追加しました。表示も全面的に見直し、Google Sitesで始めたサイトを「日暮里・荒川 水害情報ビューア」としてVercelへ移行しました。</p></div>
+      </article>
     </div>
   </section>
 
-  <footer class="footer">情報源：気象庁・国土交通省・東京都・荒川区・国土地理院。取得元の更新遅延や通信障害が起こり得ます。プロフィール画像は <a href="https://unavatar.io">Avatars provided by Unavatar</a> を利用しています。<a href="https://commons.wikimedia.org/wiki/File:Safety_evacuation_area.svg">避難ピクトグラム：国土交通省（JIS Z8210、表示色調整）</a>。<a href="/icon-credits.html">アイコンの出典・ライセンス</a>。アクセス状況の把握にGoogle Analyticsを使用しています。<a href="https://policies.google.com/technologies/partner-sites?hl=ja">データの取り扱い</a>。<br>Prototype v0.8 / 2026-09-15。Google Sitesはまだ置き換えません。</footer>
+  <!-- Version and deployment history are managed in the GitHub repository. -->
+  <footer class="footer">
+    <p>情報源：気象庁・国土交通省・東京都・荒川区・国土地理院。取得元の更新遅延や通信障害が起こる場合があります。</p>
+
+    <p>
+      プロフィール画像：<a href="https://unavatar.io">Unavatar</a>。
+      避難ピクトグラム：<a href="https://commons.wikimedia.org/wiki/File:Safety_evacuation_area.svg">国土交通省・JIS Z8210</a>。
+    </p>
+
+    <p>
+      アイコン：
+      <a href="https://fonts.google.com/icons?selected=Material+Symbols+Outlined:bolt">Google Material Symbols「bolt」</a>、
+      <a href="https://pictogrammers.com/library/mdi/icon/pipe/">Material Design Icons「pipe」</a>・
+      <a href="https://pictogrammers.com/library/mdi/icon/home-flood/">「home-flood」</a>
+      （<a href="/licenses/Apache-2.0.txt">Apache License 2.0</a>）。
+      <a href="https://tabler.io/icons/icon/flame">Tabler Icons「flame」</a>・
+      <a href="https://tabler.io/icons/icon/external-link">「external-link」</a>
+      © Paweł Kuna（<a href="/licenses/Tabler-MIT.txt">MIT License</a>）。
+      <a href="https://fontawesome.com/icons/faucet-drip?f=classic&amp;s=solid">Font Awesome Free「faucet-drip」</a>
+      © Fonticons, Inc.（<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>・一部改変）。
+    </p>
+
+    <p>
+      アクセス状況の把握にGoogle Analyticsを使用しています。
+      <a href="https://policies.google.com/technologies/partner-sites?hl=ja">データの取り扱い</a>。
+    </p>
+
+    <p><a href="https://github.com/yt0sh/arakawa-suigai-viewer">GitHub｜ソースコード・不具合報告</a></p>
+  </footer>
 </main>
 <script src="/app.js?v=0.8.0" defer></script>
 <script src="/flood-forecast.js?v=0.8.0" defer></script>

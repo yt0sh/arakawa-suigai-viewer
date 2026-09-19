@@ -16,11 +16,4 @@ let app=readFileSync(appPath,'utf8');
 app=app.replace("radarZoom:12","radarZoom:8");
 writeFileSync(appPath,app);
 
-// Production-facing release labels.
-const indexPath=path.join(out,'index.html');
-let html=readFileSync(indexPath,'utf8');
-html=html.replace('<span class="version">v0.8 preview</span>','<span class="version">v0.8</span>');
-html=html.replace('Prototype v0.8 / 2026-09-15。Google Sitesはまだ置き換えません。','v0.8 / 2026-09-16');
-writeFileSync(indexPath,html);
-
 console.log('Built v0.8 Nippori-Arakawa flood information viewer for production.');
