@@ -90,7 +90,15 @@ test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards an
   assert.match(html,/洪水キキクル/);
   assert.match(html,/表示期間切り替え/);assert.match(html,/data-range="120" class="active"/);
   assert.match(html,/arajo\/index\.html/);assert.match(html,/arage\/index\.html/);assert.match(html,/river\.go\.jp\/index\/twninfo/);assert.match(html,/kasen-suibo\.metro\.tokyo\.lg\.jp/);
-  assert.match(html,/国土地理院（グレースケール・薄表示）/);assert.match(html,/60%表示/);
+  assert.match(html,/<h2>天気・雨雲<\/h2>/);
+  assert.match(html,/<h2>荒川区の避難情報<\/h2>/);
+  for(const subtitle of ['熊谷・治水橋・岩淵水門の水位推移とライブ映像','荒川区周辺の降水域と雨雲の動き','避難所の開設状況・水害時の避難先・浸水想定','電車の運行状況と停電・断水などのライフライン情報'])assert.match(html,new RegExp(subtitle));
+  const sectionSubtitles=[...html.matchAll(/<div class="section-heading">[\s\S]*?<p>([^<]+)<\/p>/g)].map(x=>x[1]);
+  assert.equal(sectionSubtitles.filter(x=>/を確認$/.test(x)).length,0);
+  assert.match(html,/<h3><a class="radar-title-link"[^>]*>荒川区周辺の雨雲<\/a><\/h3>/);
+  assert.equal((html.match(/id="radarLabel"/g)||[]).length,1);
+  assert.doesNotMatch(html,/グレースケール・薄表示|60%表示|背景地図は|気象庁｜荒川区の天気 →/);
+  assert.match(ui,/mask:url\('\/external-link\.svg'\)/);
   assert.match(html,/id="floodStatus"/);assert.match(html,/気象庁｜荒川の氾濫情報/);assert.match(html,/flood-forecast\.js/);
   const weatherPos=html.indexOf('id="weatherStatus"'),floodPos=html.indexOf('id="floodStatus"'),evacPos=html.indexOf('id="evacStatus"');
   assert.ok(weatherPos>=0&&weatherPos<floodPos&&floodPos<evacPos);

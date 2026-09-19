@@ -77,7 +77,6 @@ a{color:inherit}
 .tile{position:absolute;width:33.3334%;height:33.3334%;object-fit:cover}
 .tile.radar-tile{z-index:2}.tile.base-tile{z-index:1}
 .radar-marker{position:absolute;z-index:3;width:14px;height:14px;border:3px solid white;border-radius:50%;background:#df3328;box-shadow:0 1px 5px rgba(0,0,0,.5);transform:translate(-50%,-50%)}
-.radar-label{position:absolute;z-index:4;left:8px;bottom:8px;background:rgba(0,0,0,.72);color:#fff;border-radius:7px;padding:5px 7px;font-size:10px}
 .radar-error{position:absolute;inset:0;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:12px;z-index:5;background:rgba(245,247,250,.94);display:none}
 .forecast-main{font-size:17px;font-weight:800;margin-top:18px;white-space:pre-line}
 .forecast-pop{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.8}

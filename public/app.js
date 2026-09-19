@@ -112,7 +112,7 @@ function tileXY(lat,lon,z){const n=2**z,r=lat*Math.PI/180;return{x:(lon+180)/360
 function tile(parent,src,dx,dy,cls){const im=document.createElement('img');im.className='tile '+cls;im.alt='';im.loading='eager';im.style.left=((dx+1)*33.3334)+'%';im.style.top=((dy+1)*33.3334)+'%';im.src=src;parent.append(im);return im}
 async function updateRadar(r){
   const box=q('#radar'),err=q('#radarError');
-  if(!r||r.state!=='ok'){err.style.display='flex';q('#radarLabel').textContent='降水レイヤーを取得できません';return}
+  if(!r||r.state!=='ok'){err.style.display='flex';q('#radarLabel').textContent='雨雲の時刻を取得できません';return}
   const z=CONFIG.radarZoom,p=tileXY(CONFIG.center.lat,CONFIG.center.lon,z),cx=Math.floor(p.x),cy=Math.floor(p.y),old=qa('#radar .tile'),added=[];let radarFail=0,baseFail=0;
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=cx+dx,y=cy+dy;
     const base=tile(box,`https://cyberjapandata.gsi.go.jp/xyz/std/${z}/${x}/${y}.png`,dx,dy,'base-tile');
@@ -120,7 +120,7 @@ async function updateRadar(r){
   }
   await Promise.all(added.map(([im,kind])=>new Promise(resolve=>{let done=false;const finish=ok=>{if(done)return;done=true;if(!ok){if(kind==='radar')radarFail++;else baseFail++}resolve()};im.onload=()=>finish(true);im.onerror=()=>finish(false);setTimeout(()=>finish(!!im.naturalWidth),8000)})));
   old.forEach(x=>x.remove());err.style.display=radarFail===9?'flex':'none';q('#radarMarker').style.left=((1+p.x-cx)/3*100)+'%';q('#radarMarker').style.top=((1+p.y-cy)/3*100)+'%';
-  q('#radarLabel').textContent='気象庁 降水レイヤー｜'+fmt(r.timestamp)+(radarFail?'｜一部取得失敗':'')+(baseFail?'｜地図 一部取得失敗':'')
+  q('#radarLabel').textContent=radarFail===9?'雨雲画像を取得できません':(r.timestamp&&Number.isFinite(new Date(r.timestamp).getTime())?fmt(r.timestamp)+' 時点の雨雲（気象庁）':'雨雲の時刻不明')+(radarFail?'｜一部取得失敗':'')+(baseFail?'｜地図 一部取得失敗':'')
 }
 async function loadJma(){
   try{const d=await jsonFetch('/api/jma',15000);updateWarning(d.warning,d.retrievedAt);updateForecast(d.forecast);await updateRadar(d.radar)}catch{updateWarning(null);updateForecast(null);await updateRadar(null)}

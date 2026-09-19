@@ -10,7 +10,7 @@
 .status-visual>h2,.status-visual>.status-main,.status-visual>.status-detail,.status-visual>.source-time,.status-visual>.source-link{position:relative;z-index:2}
 .status-card-link{display:flex;flex-direction:column;min-height:136px;color:inherit;text-decoration:none;cursor:pointer}
 .status-card-link h2{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.status-external{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.status-external{width:16px;height:16px;flex:none;color:#a7b1ba;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .status-card-link .status-detail{min-height:0;font-size:11px}
 .status-card-link .status-detail:empty{display:none}
 .status-card-link .source-time{margin-top:auto;padding-top:12px}
@@ -71,6 +71,15 @@
 .history-entry a{color:#176b90}
 .footer a{text-decoration:underline}
 
+/* Reuse the same external-link symbol on linked cards, buttons and titles. */
+:is(.link-grid a,.social-profile-card,.live-search-card){position:relative;padding-right:38px}
+:is(.link-grid a,.social-profile-card,.live-search-card,.source-strip a,.station-links a,.btn,.community-join,.community-about a,.radar-title-link)::after{content:"";display:inline-block;width:14px;height:14px;flex:none;margin-left:6px;vertical-align:-2px;background:#a7b1ba;-webkit-mask:url('/external-link.svg') center/contain no-repeat;mask:url('/external-link.svg') center/contain no-repeat;pointer-events:none}
+:is(.link-grid a,.social-profile-card,.live-search-card)::after{position:absolute;top:14px;right:14px;z-index:3;margin:0}
+.community-join::after{background:#d8dfe4;margin-left:0}
+.radar-title-link{display:inline-block;text-decoration:none;border-radius:4px}
+.radar-title-link:hover{color:var(--info)}
+.radar-time{font-size:11px;margin-top:4px}
+
 /* One interaction language for clickable cards and source buttons. */
 :is(.status-card-link,.link-grid a,.social-profile-card,.live-search-card){background:#fff;box-shadow:var(--shadow);transition:background-color .16s ease,border-color .16s ease}
 :is(.source-strip a,.station-links a,.btn){background:#fff;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:11px;font-weight:800;text-decoration:none;transition:background-color .16s ease,border-color .16s ease}
@@ -93,7 +102,7 @@
 }
 @media(max-width:620px){
   .social-grid{grid-template-columns:1fr}
-  .live-search-card{grid-template-columns:44px minmax(0,1fr);padding:12px}
+  .live-search-card{grid-template-columns:44px minmax(0,1fr);padding:12px 38px 12px 12px}
   .live-search-icon{width:44px;height:44px}
   .live-search-badge{display:none}
   .history-entry{grid-template-columns:72px minmax(0,1fr);gap:12px;padding:11px 0}

@@ -61,7 +61,7 @@
     <div class="section-heading">
       <div>
         <h2>荒川の水位・ライブカメラ</h2>
-        <p>上流から熊谷・治水橋・岩淵水門を並べて水位変化を確認</p>
+        <p>熊谷・治水橋・岩淵水門の水位推移とライブ映像</p>
       </div>
       <div>
         <div class="micro" style="margin:0 0 4px">表示期間切り替え</div>
@@ -101,21 +101,18 @@
   <section class="section-block weather-section">
     <div class="section-heading">
       <div>
-        <h2>荒川区の天気・雨雲</h2>
-        <p>現在の降水域を広域で確認</p>
+        <h2>天気・雨雲</h2>
+        <p>荒川区周辺の降水域と雨雲の動き</p>
       </div>
-      <a class="section-link" href="https://www.jma.go.jp/bosai/#pattern=default&amp;area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">気象庁｜荒川区の天気 →</a>
     </div>
     <div class="weather-grid single">
       <article class="card radar-card">
-        <h3>荒川区周辺の雨雲</h3>
-        <div class="kicker">地図：国土地理院（グレースケール・薄表示）／降水レイヤー：気象庁「雨雲の動き」（60%表示）</div>
+        <h3><a class="radar-title-link" href="https://www.jma.go.jp/bosai/#pattern=default&amp;area_type=class20s&amp;area_code=1311800" target="_blank" rel="noopener noreferrer">荒川区周辺の雨雲</a></h3>
+        <div class="source-time radar-time" id="radarLabel" aria-live="polite">雨雲の時刻を確認中…</div>
         <div class="radar" id="radar">
           <span class="radar-marker" id="radarMarker"></span>
-          <span class="radar-label" id="radarLabel">降水レイヤー取得中</span>
           <div class="radar-error" id="radarError">雨雲画像を取得できません。気象庁の公式画面を確認してください。</div>
         </div>
-        <div class="micro">背景地図はグレースケールで薄く表示し、気象庁の降水強度レイヤーを重ねています。降水がない場所は透明になります。</div>
         <div class="btnrow">
           <a class="btn" href="https://www.jma.go.jp/bosai/nowc/" target="_blank" rel="noopener noreferrer">気象庁｜雨雲の動き</a>
           <a class="btn" href="https://www.jma.go.jp/bosai/risk/#zoom:12/lat:35.732021/lon:139.785919/colordepth:normal/elements:flood" target="_blank" rel="noopener noreferrer">洪水キキクル</a>
@@ -128,8 +125,8 @@
   <section class="section-block compact-section">
     <div class="section-heading">
       <div>
-        <h2>避難・ハザード</h2>
-        <p>地域を固定せず、荒川区の公式一覧から現在地に合う避難先を確認</p>
+        <h2>荒川区の避難情報</h2>
+        <p>避難所の開設状況・水害時の避難先・浸水想定</p>
       </div>
     </div>
     <nav class="link-grid three" aria-label="避難とハザードマップ">
@@ -143,7 +140,7 @@
     <div class="section-heading">
       <div>
         <h2>交通・ライフライン</h2>
-        <p>状況は各事業者の公式サイトで直接確認</p>
+        <p>電車の運行状況と停電・断水などのライフライン情報</p>
       </div>
     </div>
 
