@@ -1,15 +1,15 @@
 # 日暮里・荒川 水害情報ビューア
 
-**v0.8** — 荒川の水位推移・雨雲・避難所・交通情報をひとまとめに。
+**v0.9.0** — 荒川の水位推移・雨雲・避難所・交通情報をひとまとめに。
 
 日暮里・荒川区周辺で水害に備えるために、気象庁・国土交通省・東京都・荒川区などの公式情報を一画面に集約するビューアです。
 
 - **公開サイト:** https://arakawa-suigai-viewer.vercel.app/
 - **GitHub:** https://github.com/yt0sh/arakawa-suigai-viewer
-- **リリース:** [v0.8](https://github.com/yt0sh/arakawa-suigai-viewer/releases/tag/v0.8)
+- **リリース:** [v0.9.0](https://github.com/yt0sh/arakawa-suigai-viewer/releases/tag/v0.9.0)
 - **本番ソース:** `main`（VercelのGit連携で配信）
 
-## v0.8の主な機能
+## v0.9.0の主な機能
 
 | セクション | 内容 |
 | --- | --- |
@@ -19,7 +19,9 @@
 | 天気・雨雲 | 気象庁の雨雲を国土地理院の地図に重ねて表示。荒川区の天気、雨雲の動き、洪水キキクルへリンク |
 | 避難・ハザード | 荒川区の避難所開設状況、水害時の避難場所、ハザードマップの公式一覧へリンク |
 | 交通・ライフライン | JR東日本・東京メトロ・京成電鉄・都営地下鉄、電気・ガス・水道・下水道の公式情報へリンク |
-| SNS | 首相官邸・東京都防災・荒川区・荒川下流河川事務所の公式Xアカウントへリンク |
+| SNS・情報交換 | 防災関係機関の公式Xアカウント、地域名を含むX検索、住民向けLINEオープンチャットへリンク |
+| 防災アプリ | 東京都・荒川区・NHK・Yahoo!・NERVの防災アプリ配布ページへリンク |
+| サイトの歩み | 2019年の開設、2021年と2026年の更新経緯を簡潔に掲載 |
 
 交通・ライフラインの稼働状況やSNS投稿は自動集約せず、公式ページで確認する構成です。避難所も個別施設のカードではなく、公式一覧へのリンクに集約しています。
 
@@ -56,9 +58,9 @@ npm run check
 npm run build
 ```
 
-- `npm test`: v0.8のビルド後、APIハンドラーとv0.8の既存テストを実行
+- `npm test`: 現行版のビルド後、APIハンドラーと画面の既存テストを実行
 - `npm run check`: ビルド後、主要JavaScriptファイルの構文を検証
-- `npm run build`: `scripts/build-v08.mjs` で `public/` から `dist/` を生成し、本番用のバージョン表記・雨雲の表示範囲を適用
+- `npm run build`: `scripts/build-v08.mjs` で `public/` から `dist/` を生成し、本番用の雨雲表示範囲を適用
 
 `dist/` は生成物です。画面は `public/`、APIは `api/`、取得・解析処理は `lib/` を編集してください。静的ファイルだけを配信するローカルサーバーでは `/api/*` は動作しません。APIを含む確認にはVercelのプレビュー環境等を使用します。
 
@@ -66,29 +68,31 @@ npm run build
 public/                 画面・スタイル・ブラウザー側処理
 api/                    Vercel Functionsのエンドポイント
 lib/                    公式データの取得・解析処理
-scripts/build-v08.mjs    v0.8本番ビルド
-tests/                  API・v0.8の検証
+scripts/build-v08.mjs    現行の本番ビルド（ファイル名は互換性のため維持）
+tests/                  API・画面の検証
 vercel.json             ビルド・配信設定
 ```
 
-Vercelは `npm run build` を実行し、`dist/` と `api/` を配信します。旧版用の `build-v07.mjs`、`verify-release.mjs`、`check-live.mjs` は過去の検証用で、現行v0.8のリリース判定には使用しません。
+Vercelは `npm run build` を実行し、`dist/` と `api/` を配信します。旧版用の `build-v07.mjs`、`verify-release.mjs`、`check-live.mjs` は過去の検証用で、現行版のリリース判定には使用しません。
 
 ## ブランチとリリースの運用
 
 - `main` を公開版のソースとします。
 - 変更は短期間の作業ブランチで行い、PRで `main` に取り込みます。`main` へのpushとPRで既存のテスト・構文チェックを実行します。
-- リリースは `v0.8` のようなタグとGitHub Releaseで記録します。サイト公開とGitHub Releaseの作成は別の操作です。
+- `main` への反映は随時デプロイします。すべてのデプロイでバージョンを変更するわけではありません。
+- 文言・リンク・表示位置・軽微な不具合修正はパッチ版（例：`0.9.1`）、新しい情報ブロック・データ取得先・機能追加はマイナー版（例：`0.10.0`）として更新します。
+- バージョン更新時は `package.json`、README、`vX.Y.Z` タグ、GitHub Releaseを同じ内容に揃えます。バージョンは公開画面には表示しません。
 - 取り込み・検証が終わった作業ブランチは整理します。2026年9月の旧ブランチと保管先は [ブランチ整理記録](docs/branch-archive.md) を参照してください。
 
 ## 利用上の注意
 
-このサイトは公式情報の再表示・集約を目的とした補助サイトです。取得元の更新遅延、通信障害、カメラ配信の停止などが起こり得ます。画面の観測時刻・取得状態を確認し、避難判断は荒川区・気象庁・国土交通省などの公式発表で最終確認してください。
+このサイトは公式情報の再表示・集約を目的とした補助サイトです。取得元の更新遅延、通信障害、カメラ配信の停止などが起こり得ます。画面の観測時刻・取得状態を確認し、最新情報は各リンク先で確認してください。
 
 地図・映像・ロゴ・ピクトグラム等の出典は画面内のリンクとフッターに記載しています。
 
-ライフラインの背景アイコンには、Google Material Symbols（bolt）、Tabler（flame filled）、Font Awesome Free（faucet-drip）、Material Design Icons（pipe）を使用しています。出典と利用条件は [アイコンの出典・ライセンス](https://arakawa-suigai-viewer.vercel.app/icon-credits.html) を参照してください。
+ライフラインの背景アイコンには、Google Material Symbols（bolt）、Tabler Icons（flame）、Font Awesome Free（faucet-drip）、Material Design Icons（pipe）を使用しています。出典と利用条件は公開画面のフッターに記載しています。
 
 
 ### アクセス解析
 
-GA4（測定ID `G-T0QZT180EM`）を `public/analytics.js` で読み込みます。本番ホスト `arakawa-suigai-viewer.vercel.app` のみを計測し、localhost・Vercelプレビューは対象外です。Googleシグナルと広告パーソナライズのシグナルを無効にしています。メイン画面とアイコン出典ページに適用しています。
+GA4（測定ID `G-T0QZT180EM`）を `public/analytics.js` で読み込みます。本番ホスト `arakawa-suigai-viewer.vercel.app` のみを計測し、localhost・Vercelプレビューは対象外です。Googleシグナルと広告パーソナライズのシグナルを無効にしています。

@@ -1,6 +1,14 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {existsSync,readFileSync} from 'node:fs';
 import {STATIONS,summarizeWater,normalizeObservations} from '../lib/water.mjs';
 import {createContext,runInContext} from 'node:vm';
+test('release metadata is v0.9.0 and remains hidden from the page',()=>{
+  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
+  const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
+  assert.equal(pkg.version,'0.9.0');
+  assert.match(html,/style\.css\?v=0\.9\.0/);
+  assert.match(html,/app\.js\?v=0\.9\.0/);
+  assert.doesNotMatch(html,/<span class="version">/);
+});
 test('status cards distinguish no alerts, active alerts, unknown data and fetch failures',async()=>{
   const nodes=new Map();
   const node=id=>{if(!nodes.has(id))nodes.set(id,{textContent:'',className:''});return nodes.get(id)};
@@ -79,7 +87,7 @@ test('water summary returns selected station metadata and exact deltas',()=>{
   const now=Date.parse('2026-09-10T00:05:00Z'),d=summarizeWater(rows,STATIONS.kumagaya,now);
   assert.equal(d.station.key,'kumagaya');assert.equal(d.latest.value,2.3);assert.equal(d.delta10,.1);assert.equal(d.delta60,.3);assert.equal(d.chartMax,6)
 });
-test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards and visual link cards',()=>{
+test('current frontend has ordered alerts, Tokyo live cameras, profile SNS cards and visual link cards',()=>{
   const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8'),app=readFileSync(new URL('../dist/app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../dist/style.css',import.meta.url),'utf8'),ui=readFileSync(new URL('../dist/v08-ui.css',import.meta.url),'utf8'),flood=readFileSync(new URL('../dist/flood-forecast.js',import.meta.url),'utf8'),api=readFileSync(new URL('../api/flood-forecast.js',import.meta.url),'utf8'),icons=readFileSync(new URL('../dist/card-icons.js',import.meta.url),'utf8'),iconCss=readFileSync(new URL('../dist/card-icons.css',import.meta.url),'utf8'),evacSvg=readFileSync(new URL('../dist/evacuation-area-symbol.svg',import.meta.url),'utf8');
   assert.match(html,/<title>日暮里・荒川 水害情報ビューア<\/title>/);assert.match(html,/地域の水害関連情報をまとめています。最新情報は各リンク先をご確認ください。/);
   assert.doesNotMatch(html,/class="notice"|status-card-source/);
@@ -120,7 +128,7 @@ test('v0.8 frontend has ordered alerts, Tokyo live cameras, profile SNS cards an
   for(const appName of ['東京都防災アプリ','荒川防災アプリ','NHK ONE ニュース・防災アプリ','Yahoo! 防災アプリ','特務機関 NERV防災アプリ'])assert.match(html,new RegExp(appName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
   assert.match(html,/bousai\.metro\.tokyo\.lg\.jp\/1028747\/index\.html/);assert.match(html,/dentatsushudan\/bousaiapuri\.html/);
   assert.doesNotMatch(html,/東京都｜公式配布ページ|荒川区｜公式配布ページ|NHK｜公式案内|Yahoo!防災速報｜公式案内|ゲヒルン｜公式案内/);
-  assert.match(html,/style\.css\?v=0\.8\.1/);assert.match(html,/v08-ui\.css\?v=0\.8\.1/);
+  assert.match(html,/style\.css\?v=0\.9\.0/);assert.match(html,/v08-ui\.css\?v=0\.9\.0/);
   assert.match(html,/class="link-grid five"/);assert.match(ui,/\.link-grid\.five/);assert.match(ui,/top:13px;right:13px/);
   assert.match(ui,/\.apps-section \.link-grid a::after\{top:50%;transform:translateY\(-50%\)\}/);
   assert.match(html,/CC BY 4\.0<\/a>・一部改変/);assert.match(html,/GitHub｜ソースコード・不具合報告/);

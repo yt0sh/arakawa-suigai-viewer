@@ -1,4 +1,4 @@
-/* v0.8 view-layer refinements */
+/* Shared view-layer refinements */
 .radar{aspect-ratio:1/1}
 .tile.base-tile{filter:grayscale(1) brightness(1.08) contrast(.92);opacity:.30}
 .tile.radar-tile{opacity:.60}
