@@ -1,0 +1,51 @@
+# 保守・運用ガイド
+
+この文書は、今後このサイトを更新・保守するときに、既存の構成・検証方法・リリース方針を引き継ぐための記録です。
+
+## 開発環境と検証
+
+Node.js 20以上。GitHub ActionsではNode.js 24を使用します。追加のnpm依存パッケージはありません。
+
+```sh
+git clone https://github.com/yt0sh/arakawa-suigai-viewer.git
+cd arakawa-suigai-viewer
+npm test
+npm run check
+npm run build
+```
+
+- `npm test`: 現行版のビルド後、APIハンドラーと画面の既存テストを実行
+- `npm run check`: ビルド後、主要JavaScriptファイルの構文を検証
+- `npm run build`: `scripts/build-v08.mjs` で `public/` から `dist/` を生成し、本番用の雨雲表示範囲を適用
+
+`dist/` は生成物です。画面は `public/`、APIは `api/`、取得・解析処理は `lib/` を編集してください。静的ファイルだけを配信するローカルサーバーでは `/api/*` は動作しません。APIを含む確認にはVercelのプレビュー環境等を使用します。
+
+```text
+public/                  画面・スタイル・ブラウザー側処理
+api/                     Vercel Functionsのエンドポイント
+lib/                     公式データの取得・解析処理
+scripts/build-v08.mjs    現行の本番ビルド（ファイル名は互換性のため維持）
+tests/                   API・画面の検証
+vercel.json              ビルド・配信設定
+```
+
+Vercelは `npm run build` を実行し、`dist/` と `api/` を配信します。旧版用の `build-v07.mjs`、`verify-release.mjs`、`check-live.mjs` は過去の検証用で、現行版のリリース判定には使用しません。
+
+## ブランチとリリース
+
+- `main` を公開版のソースとします。
+- 変更は短期間の作業ブランチで行い、PRで `main` に取り込みます。`main` へのpushとPRで既存のテスト・構文チェックを実行します。
+- `main` への反映は随時デプロイします。すべてのデプロイでバージョンを変更するわけではありません。
+- 文言・リンク・表示位置・軽微な不具合修正はパッチ版（例：`0.9.1`）、新しい情報ブロック・データ取得先・機能追加はマイナー版（例：`0.10.0`）として更新します。
+- バージョン更新時は `package.json`、README内の非表示コメント、`vX.Y.Z` タグ、GitHub Releaseを同じ内容に揃えます。バージョンは公開画面とREADME本文には表示しません。
+- `package.json` のバージョンを更新して `main` に反映すると、GitHub Actionsが同名のタグとReleaseを作成します。`docs/releases/vX.Y.Z.md` がある場合はリリース説明に使用します。
+- 取り込み・検証が終わった作業ブランチは整理します。2026年9月の旧ブランチと保管先は[ブランチ整理記録](branch-archive.md)を参照してください。
+
+## アクセス解析
+
+GA4（測定ID `G-T0QZT180EM`）を `public/analytics.js` で読み込みます。本番ホスト `arakawa-suigai-viewer.vercel.app` のみを計測し、localhost・Vercelプレビューは対象外です。Googleシグナルと広告パーソナライズのシグナルを無効にしています。
+
+## 関連資料
+
+- [ブランチ整理記録](branch-archive.md)
+- [リリースノート](releases/)
