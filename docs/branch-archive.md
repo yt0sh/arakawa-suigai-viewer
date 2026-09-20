@@ -25,3 +25,16 @@ git switch -c restored/water-v07 archive/feature/water-v07
 ```
 
 `archive/` タグは公開版のReleaseタグとは区別し、保管用として保持します。既存のローカル作業ブランチや未コミットの変更はこの整理では変更しません。
+
+## v0.9.1公開時の整理
+
+v0.9.0からv0.9.1までに使用した一時ブランチは、成果が `main` に反映済みであることを確認しました。固有の試作コードは残っていないため保管タグは増やさず、削除前の先端コミットを以下に記録します。整理後の公開・開発の基点は `main` のみです。
+
+| 旧ブランチ | 先端コミット | 整理理由 |
+| --- | --- | --- |
+| `codex/readme-portal-preview` | `ad7bcfdbc6025f2852f0243d157ce500e8cc84c6` | README刷新の確認用。成果はPR #5で `main` に反映済み。 |
+| `fix/jma-warning-r8` | `77c6d03b544d58200649724d5fc4d620922db01b` | 気象庁警報データ修正の初期作業。成果は最新の `main` に反映済み。 |
+| `fix/jma-warning-r8-main` | `ac64818744da9909344b8c8c97f6aacaa676fae3` | 緊急修正の公開用。先端は整理時点の `main` と同一。 |
+| `preview/sns-openchat-history` | `56da7074582ce01da67f7a0db020cf909254bc7a` | SNS・オープンチャット・歩みの確認用。成果は `main` に反映済み。 |
+| `release/v0.9.0` | `0bf3472958ec6c7917d9da309ec00e93f967a638` | v0.9.0公開準備用。Release作成済み。 |
+| `release/v0.9.0-automation` | `4bd852a1f7b34ca760a4033727eb17541a3d4d13` | Release自動化の確認用。ワークフローは `main` に反映済み。 |

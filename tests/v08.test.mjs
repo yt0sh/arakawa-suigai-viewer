@@ -1,12 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {existsSync,readFileSync} from 'node:fs';
 import {STATIONS,summarizeWater,normalizeObservations} from '../lib/water.mjs';
 import {createContext,runInContext} from 'node:vm';
-test('release metadata is v0.9.0 and remains hidden from the page',()=>{
+test('release metadata is v0.9.1 and remains hidden from the page',()=>{
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
   const html=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
-  assert.equal(pkg.version,'0.9.0');
-  assert.match(html,/style\.css\?v=0\.9\.0/);
-  assert.match(html,/app\.js\?v=0\.9\.0/);
+  assert.equal(pkg.version,'0.9.1');
+  assert.match(html,/style\.css\?v=0\.9\.1/);
+  assert.match(html,/app\.js\?v=0\.9\.1/);
   assert.doesNotMatch(html,/<span class="version">/);
 });
 test('status cards distinguish no alerts, active alerts, unknown data and fetch failures',async()=>{
@@ -140,7 +140,7 @@ test('current frontend has ordered alerts, Tokyo live cameras, profile SNS cards
   for(const appName of ['東京都防災アプリ','荒川防災アプリ','NHK ONE ニュース・防災アプリ','Yahoo! 防災アプリ','特務機関 NERV防災アプリ'])assert.match(html,new RegExp(appName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
   assert.match(html,/bousai\.metro\.tokyo\.lg\.jp\/1028747\/index\.html/);assert.match(html,/dentatsushudan\/bousaiapuri\.html/);
   assert.doesNotMatch(html,/東京都｜公式配布ページ|荒川区｜公式配布ページ|NHK｜公式案内|Yahoo!防災速報｜公式案内|ゲヒルン｜公式案内/);
-  assert.match(html,/style\.css\?v=0\.9\.0/);assert.match(html,/v08-ui\.css\?v=0\.9\.0/);
+  assert.match(html,/style\.css\?v=0\.9\.1/);assert.match(html,/v08-ui\.css\?v=0\.9\.1/);
   assert.match(html,/class="link-grid five"/);assert.match(ui,/\.link-grid\.five/);assert.match(ui,/top:13px;right:13px/);
   assert.match(ui,/\.apps-section \.link-grid a::after\{top:50%;transform:translateY\(-50%\)\}/);
   assert.match(html,/CC BY 4\.0<\/a>・一部改変/);assert.match(html,/GitHub｜ソースコード・不具合報告/);
