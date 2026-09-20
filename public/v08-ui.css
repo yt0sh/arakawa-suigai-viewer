@@ -5,6 +5,10 @@
 .weather-grid.single{grid-template-columns:1fr}
 .dot.lv4{background:#8b4cc5;box-shadow:0 0 0 5px #f1e9fb}
 .dot.lv5{background:#151017;box-shadow:0 0 0 5px #eee9ef}
+.status-weather:has(.dot.adv){border-top:4px solid #f2dc00;padding-top:12px}
+.status-weather:has(.dot.warn){border-top:4px solid #e83819;padding-top:12px}
+.status-weather:has(.dot.lv4){border-top:4px solid #a500a5;padding-top:12px}
+.status-weather:has(.dot.lv5){border-top:4px solid #151017;padding-top:12px}
 
 .status-visual{position:relative;overflow:hidden;isolation:isolate}
 .status-visual>h2,.status-visual>.status-main,.status-visual>.status-detail,.status-visual>.source-time,.status-visual>.source-link{position:relative;z-index:2}
