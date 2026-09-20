@@ -4,8 +4,12 @@ const STATIONS=[
   {key:'chisuibashi',name:'治水橋',location:'さいたま市西区・荒川上流',id:'303041283308060',riverUrl:'https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=4&ofcCd=21280&obsCd=9&isCurrent=true&fld=0',cameraUrl:'https://www.ktr.mlit.go.jp/arajo/live/camera02.html'},
   {key:'iwabuchi',name:'岩淵水門',location:'東京都北区・荒川下流',id:'303041283309040',riverUrl:'https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=4&ofcCd=21281&obsCd=6&isCurrent=true&fld=0',cameraUrl:'https://www.ktr.mlit.go.jp/arage/arage00563.html'}
 ];
-const WARNING_NAMES={'03':'大雨警報','04':'洪水警報','05':'暴風警報','06':'大雪警報','07':'波浪警報','08':'高潮警報','10':'大雨注意報','12':'大雪注意報','13':'風雪注意報','14':'雷注意報','15':'強風注意報','16':'波浪注意報','17':'融雪注意報','18':'洪水注意報','19':'高潮注意報','20':'濃霧注意報','21':'乾燥注意報','22':'なだれ注意報','23':'低温注意報','24':'霜注意報','25':'着氷注意報','26':'着雪注意報','32':'暴風雪警報'};
-const WARNING_CODES=new Set(['03','04','05','06','07','08','32']);
+const WARNING_DEFINITIONS={
+  '02':['暴風雪警報',3],'03':['大雨警報',3],'04':['洪水警報',3],'05':['暴風警報',3],'06':['大雪警報',3],'07':['波浪警報',3],'08':['高潮警報',3],'09':['土砂災害警報',3],
+  '10':['大雨注意報',2],'12':['大雪注意報',2],'13':['風雪注意報',2],'14':['雷注意報',2],'15':['強風注意報',2],'16':['波浪注意報',2],'17':['融雪注意報',2],'18':['洪水注意報',2],'19':['高潮注意報',2],'20':['濃霧注意報',2],'21':['乾燥注意報',2],'22':['なだれ注意報',2],'23':['低温注意報',2],'24':['霜注意報',2],'25':['着氷注意報',2],'26':['着雪注意報',2],'29':['土砂災害注意報',2],
+  '32':['暴風雪特別警報',5],'33':['大雨特別警報',5],'35':['暴風特別警報',5],'36':['大雪特別警報',5],'37':['波浪特別警報',5],'38':['高潮特別警報',5],'39':['土砂災害特別警報',5],
+  '43':['大雨危険警報',4],'48':['高潮危険警報',4],'49':['土砂災害危険警報',4]
+};
 const COLORS={normal:'#d9efff',standby:'#dff3e4',advisory:'#fff2b8',evacuation:'#ffd9d6',danger:'#eadcff'};
 const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
 const fmt=t=>{const d=new Date(t);return Number.isFinite(d.getTime())?new Intl.DateTimeFormat('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Tokyo'}).format(d):'時刻不明'};
@@ -99,8 +103,14 @@ async function loadEvacuation(){
 }
 function updateWarning(w,retrievedAt){
   if(!w||w.state!=='ok'){q('#weatherStatus').textContent='取得できません';q('#weatherDetail').textContent='気象庁の公式画面を確認してください。';dot('#weatherDot');q('#weatherTime').textContent='取得失敗 '+fmt(Date.now());return}
-  const active=(w.warnings||[]).filter(x=>x.code&&!String(x.status||'').includes('解除')),unknown=active.filter(x=>!WARNING_NAMES[x.code]);let label,detail,kind;
-  if(!active.length){label='警報・注意報なし';detail='';kind='ok'}else{const severe=active.some(x=>WARNING_CODES.has(x.code)||!WARNING_NAMES[x.code]);label=severe?'警報等発表中':'注意報発表中';detail=active.map(x=>WARNING_NAMES[x.code]||('未対応コード '+x.code)).join(' / ');if(unknown.length)detail+='（名称未対応。公式画面で確認）';kind=severe?'warn':'adv'}
+  const active=(w.warnings||[]).filter(x=>x.code&&!String(x.status||'').includes('解除')).map(x=>{const def=WARNING_DEFINITIONS[x.code];return{...x,name:x.name||def?.[0]||null,level:Number(x.level||def?.[1])||null}}).sort((a,b)=>(b.level||0)-(a.level||0));
+  const unknown=active.filter(x=>!x.name||!x.level),highest=active.reduce((n,x)=>Math.max(n,x.level||0),0);let label,detail,kind;
+  if(!active.length){label='警報・注意報なし';detail='';kind='ok'}else{
+    label=highest>=5?'特別警報発表中':highest>=4?'レベル4相当 発表中':highest>=3?'警報発表中':highest>=2?'注意報発表中':'気象情報発表中';
+    detail=active.map(x=>x.name?`レベル${x.level}相当｜${x.name}`:`未対応の気象情報（コード ${x.code}）`).join(' ／ ');
+    if(unknown.length)detail+='｜詳細は気象庁で確認してください';
+    kind=highest>=5?'lv5':highest>=4?'lv4':highest>=3?'warn':'adv';
+  }
   q('#weatherStatus').textContent=label;q('#weatherDetail').textContent=detail;dot('#weatherDot',kind);q('#weatherTime').textContent=statusTimestamp(retrievedAt,w.reportDatetime)
 }
 function updateForecast(f){
