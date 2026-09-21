@@ -16,4 +16,4 @@ let app=readFileSync(appPath,'utf8');
 app=app.replace("radarZoom:12","radarZoom:8");
 writeFileSync(appPath,app);
 
-console.log('Built v0.9.1 Nippori-Arakawa flood information viewer for production.');
+console.log('Built v0.9.2 Nippori-Arakawa flood information viewer for production.');

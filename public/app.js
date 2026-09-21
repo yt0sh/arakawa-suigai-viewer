@@ -95,10 +95,10 @@ async function loadEvacuation(){
   try{
     const d=await jsonFetch('/api/evacuation');if(d.state==='error')throw Error();
     let label,kind,detail=d.summary||'公式発表を確認してください';
-    if(d.state==='active'){label=({3:'高齢者等避難 発令中',4:'避難指示 発令中',5:'緊急安全確保 発令中'})[d.highest]||'避難情報 発令中';kind='warn'}
+    if(d.state==='active'){label=({3:'高齢者等避難 発令中',4:'避難指示 発令中',5:'緊急安全確保 発令中'})[d.highest]||'避難情報 発令中';kind=d.highest>=5?'lv5':d.highest>=4?'lv4':'warn'}
     else if(d.state==='none'){label='避難指示なし';kind='ok';detail='高齢者等避難・緊急安全確保も発令なし'}
     else{label='一部を確認できません';kind=''}
-    q('#evacStatus').textContent=label;q('#evacDetail').textContent=detail;dot('#evacDot',kind);q('#evacTime').textContent=statusTimestamp(d.retrievedAt);
+    q('#evacStatus').textContent=label;q('#evacDetail').textContent=detail;dot('#evacDot',kind);q('#evacTime').textContent=statusTimestamp(d.retrievedAt,d.reportDatetime);
   }catch{q('#evacStatus').textContent='取得できません';q('#evacDetail').textContent='荒川区公式で発令状況を確認してください。';dot('#evacDot');q('#evacTime').textContent='取得失敗 '+fmt(Date.now())}
 }
 function updateWarning(w,retrievedAt){

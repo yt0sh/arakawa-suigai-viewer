@@ -1,12 +1,12 @@
 {
   "name": "arakawa-suigai-viewer",
   "private": true,
-  "version": "0.9.1",
+  "version": "0.9.2",
   "type": "module",
   "engines": {"node": ">=20"},
   "scripts": {
     "build": "node scripts/build-v08.mjs",
-    "test": "npm run build && node --test tests/handlers.test.mjs tests/jma-warning.test.mjs tests/v08.test.mjs",
+    "test": "npm run build && node --test tests/handlers.test.mjs tests/jma-warning.test.mjs tests/evacuation.test.mjs tests/v08.test.mjs",
     "check": "npm run build && node --check public/app.js && node --check public/flood-forecast.js && node --check public/card-icons.js && node --check lib/water.mjs && node --check lib/camera.mjs && node --check api/jma.js && node --check api/radar-tile.js && node --check api/flood-forecast.js && npm run check:links:validate",
     "check:links": "node scripts/check-external-links.mjs",
     "check:links:validate": "node scripts/check-external-links.mjs --validate-only"

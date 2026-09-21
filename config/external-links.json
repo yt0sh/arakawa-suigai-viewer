@@ -2,6 +2,7 @@
   {"id":"jma-warning-page","name":"警報・注意報（荒川区）","category":"最重要情報","provider":"気象庁","priority":"critical","url":"https://www.jma.go.jp/bosai/warning/#area_type=class20s&area_code=1311800","sources":["public/index.html"]},
   {"id":"jma-flood-page","name":"荒川の氾濫情報","category":"最重要情報","provider":"気象庁","priority":"critical","url":"https://www.jma.go.jp/bosai/flood/","sources":["public/index.html","lib/arakawa.mjs"]},
   {"id":"arakawa-evacuation","name":"荒川区 避難情報","category":"最重要情報","provider":"荒川区","priority":"critical","url":"https://bosai.city.arakawa.tokyo.jp/hinan/hinan-siji.html","sources":["public/index.html","lib/arakawa.mjs"]},
+  {"id":"arakawa-evacuation-data","name":"荒川区 避難情報データ","category":"データ取得","provider":"荒川区","priority":"critical","url":"https://bosai.city.arakawa.tokyo.jp/apps/get_json.php?file=renkei_6_hinan_kankoku_portal.js","sources":["lib/arakawa.mjs"]},
 
   {"id":"arajo-home","name":"荒川上流河川事務所","category":"河川・カメラ","provider":"国土交通省","priority":"high","url":"https://www.ktr.mlit.go.jp/arajo/index.html","sources":["public/index.html"]},
   {"id":"arage-home","name":"荒川下流河川事務所","category":"河川・カメラ","provider":"国土交通省","priority":"high","url":"https://www.ktr.mlit.go.jp/arage/index.html","sources":["public/index.html"]},
