@@ -31,14 +31,23 @@ jobs:
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
 
-      - name: Create tag and GitHub Release
+      - name: Sync release notes and create current release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
         shell: bash
         run: |
+          shopt -s nullglob
+          for NOTES_FILE in docs/releases/v*.md; do
+            RELEASE_TAG="$(basename "$NOTES_FILE" .md)"
+            if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+              gh release edit "$RELEASE_TAG" --notes-file "$NOTES_FILE"
+              echo "Updated release notes for $RELEASE_TAG."
+            fi
+          done
+
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "$TAG already exists; nothing to do."
+            echo "$TAG already exists; release notes are synchronized."
             exit 0
           fi
 
