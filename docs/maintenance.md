@@ -77,6 +77,19 @@ Vercelは `npm run build` を実行し、`dist/` と `api/` を配信します�
 
 GA4（測定ID `G-T0QZT180EM`）を `public/analytics.js` で読み込みます。本番ホスト `arakawa-suigai-viewer.vercel.app` のみを計測し、localhost・Vercelプレビューは対象外です。Googleシグナルと広告パーソナライズのシグナルを無効にしています。
 
+## 外部リンクの検査
+
+外部リンクは `config/external-links.json` で管理します。各URLに表示名・分類・提供元・重要度・参照元ファイルを付けています。X・LINE・YouTubeなど自動アクセスの制限が起こりやすいリンクは `policy: "advisory"` とし、失敗時は要目視確認として扱います。
+
+```sh
+npm run check:links:validate  # 台帳の構造、参照元、公開リンクの登録漏れを確認
+npm run check:links           # 実際に外部URLへ接続して結果を表示
+```
+
+GitHub Actionsの「External links」は、関連ファイルの更新時、毎月1日12:17（日本時間）、手動実行時に検査します。結果はActionsの実行サマリーへ分類付きの表として残し、当初はIssueや外部サービスへの通知を自動作成しません。
+
+公開リポジトリに60日間活動がない場合、GitHubが定期ワークフローを自動停止することがあります。台風・大雨前のメンテ時にはActions画面から手動実行してください。
+
 ## 関連資料
 
 - [ブランチ整理記録](branch-archive.md)
