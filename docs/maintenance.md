@@ -121,8 +121,6 @@ GitHubでは、公開リポジトリに60日間活動がない場合に定期ワ
 
 `package.json` のバージョンが更新されて `main` に反映されると、GitHub Actionsの「Release」が同名のタグとReleaseを作成します。`docs/releases/vX.Y.Z.md` が存在する場合は、その内容をRelease本文に使用します。
 
-過去の作業ブランチと保管方針は[ブランチ整理記録](branch-archive.md)にまとめています。
-
 ## アクセス解析
 
 本番サイトの利用状況はGA4（測定ID `G-T0QZT180EM`）で計測します。読み込み処理は `public/analytics.js` に置き、対象ホストを `arakawa-suigai-viewer.vercel.app` に限定しています。localhostとVercelのプレビュー環境は計測対象外です。
@@ -132,5 +130,4 @@ Googleシグナルと広告パーソナライズのシグナルは無効です�
 ## 関連資料
 
 - [README](../README.md)
-- [ブランチ整理記録](branch-archive.md)
 - [リリースノート](releases/)
